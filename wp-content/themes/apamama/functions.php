@@ -1,5 +1,4 @@
 <?php
-	add_theme_support('woocommerce');
 
 	// disable Emoji
 	function disable_wp_emojicons() {
@@ -17,3 +16,32 @@
 	  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
 	}
 	add_action( 'init', 'disable_wp_emojicons' );
+
+	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+
+	//woocommerce support
+	remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
+	remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
+	function apamama_wrapper_start(){
+		echo '<div class="main a-shop"><div class="container-fluid">';
+	}
+
+	add_action('woocommerce_before_main_content', 'apamama_wrapper_start', 10);
+
+	function apamama_wrapper_end(){
+		echo '</div></div>';
+	}
+
+	add_action('woocommerce_after_main_content', 'apamama_wrapper_end', 10);
+
+
+	// Remove default WooCommerce breadcrumbs and add Yoast ones instead
+	remove_action( 'woocommerce_before_main_content','woocommerce_breadcrumb', 20, 0);
+	add_action( 'woocommerce_before_main_content','my_yoast_breadcrumb', 20, 0);
+	if (!function_exists('my_yoast_breadcrumb') ) {
+		function my_yoast_breadcrumb() {
+			yoast_breadcrumb('<p id="breadcrumbs">','</p>');
+		}
+	}
+	add_theme_support('woocommerce');
+

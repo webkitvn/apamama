@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'sanfrancisco-thin';
+    src: url('fonts/sanfrancisco-thin.eot');
+    src: url('fonts/sanfrancisco-thin.eot') format('embedded-opentype'),
+         url('fonts/sanfrancisco-thin.woff2') format('woff2'),
+         url('fonts/sanfrancisco-thin.woff') format('woff'),
+         url('fonts/sanfrancisco-thin.ttf') format('truetype'),
+         url('fonts/sanfrancisco-thin.svg#sanfrancisco-thin') format('svg');
+}

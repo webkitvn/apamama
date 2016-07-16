@@ -22,6 +22,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header( 'shop' ); ?>
 
+	<?php 
+		$category = get_queried_object();
+		$args = array(
+	        'taxonomy'     => 'product_cat',
+	        'orderby'      => 'name',
+	        'hide_empty'   => 1,
+	        'parent' => $category->term_id
+	  	);
+	  	$all_categories = get_categories( $args );	
+	?>
+	<?php if(!empty($all_categories)) : ?>
+	<div class="container-fluid product-cats-wrapper">
+		<div class="row">
+			<div class="col-xs-12">
+				<ul class="product-cats">
+					<?php foreach($all_categories as $cate) : ?>
+					<li>
+						<?php 
+							$thumbnail_id = get_woocommerce_term_meta( $cate->term_id, 'thumbnail_id', true );
+						    $image = wp_get_attachment_url( $thumbnail_id );
+						    if ( $image ) :
+						?>
+							    <a href="<?php echo get_term_link($cate->slug, 'product_cat') ?>">
+							    	<img src="<?php echo $image ?>" alt="<?php echo $cate->name ?>">
+							    	<span><?php echo $cate->name ?></span>
+							    </a>
+						<?php endif; ?>
+					</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<?php endif; ?>
+
 	<?php
 		/**
 		 * woocommerce_before_main_content hook.
@@ -48,8 +83,9 @@ get_header( 'shop' ); ?>
 			do_action( 'woocommerce_archive_description' );
 		?>
 
-		<?php if ( have_posts() ) : ?>
 
+
+		<?php if ( have_posts() ) : ?>
 			<?php
 				/**
 				 * woocommerce_before_shop_loop hook.

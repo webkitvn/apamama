@@ -1,0 +1,9 @@
+@font-face {
+    font-family: 'sanfrancisco-bold';
+    src: url('../fonts/sanfrancisco-bold.eot');
+    src: url('../fonts/sanfrancisco-bold.eot') format('embedded-opentype'),
+         url('../fonts/sanfrancisco-bold.woff2') format('woff2'),
+         url('../fonts/sanfrancisco-bold.woff') format('woff'),
+         url('../fonts/sanfrancisco-bold.ttf') format('truetype'),
+         url('../fonts/sanfrancisco-bold.svg#sanfrancisco-bold') format('svg');
+}
