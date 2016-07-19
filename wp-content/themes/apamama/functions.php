@@ -1,35 +1,19 @@
 <?php
 
-	// disable Emoji
-	function disable_wp_emojicons() {
-
-	  // all actions related to emojis
-	  remove_action( 'admin_print_styles', 'print_emoji_styles' );
-	  remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-	  remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
-	  remove_action( 'wp_print_styles', 'print_emoji_styles' );
-	  remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
-	  remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
-	  remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
-
-	  // filter to remove TinyMCE emojis
-	  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
-	}
-	add_action( 'init', 'disable_wp_emojicons' );
-
+	
 	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 	//woocommerce support
 	remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 	remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 	function apamama_wrapper_start(){
-		echo '<div class="main a-shop"><div class="container-fluid">';
+		echo '<div class="main products-wrapper">';
 	}
 
 	add_action('woocommerce_before_main_content', 'apamama_wrapper_start', 10);
 
 	function apamama_wrapper_end(){
-		echo '</div></div>';
+		echo '</div>';
 	}
 
 	add_action('woocommerce_after_main_content', 'apamama_wrapper_end', 10);
@@ -37,11 +21,32 @@
 
 	// Remove default WooCommerce breadcrumbs and add Yoast ones instead
 	remove_action( 'woocommerce_before_main_content','woocommerce_breadcrumb', 20, 0);
-	add_action( 'woocommerce_before_main_content','my_yoast_breadcrumb', 20, 0);
-	if (!function_exists('my_yoast_breadcrumb') ) {
-		function my_yoast_breadcrumb() {
-			yoast_breadcrumb('<p id="breadcrumbs">','</p>');
-		}
-	}
+	// add_action( 'woocommerce_before_main_content','my_yoast_breadcrumb', 20, 0);
+	// if (!function_exists('my_yoast_breadcrumb') ) {
+	// 	function my_yoast_breadcrumb() {
+	// 		yoast_breadcrumb('<p id="breadcrumbs">','</p>');
+	// 	}
+	// }
 	add_theme_support('woocommerce');
 
+	$args = array(
+		'name'          => 'Product Sidebar',
+		'id'            => "product-sidebar",
+		'description'   => 'Apamama Product Sidebar',
+		'class'         => '',
+		'before_widget' => '<figure id="widget-sidebar %1$s" class="widget %2$s">',
+		'after_widget'  => "</figure>\n",
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => "</h2>\n",
+	);
+
+	register_sidebar( $args );
+
+	add_filter('woocommerce_currency_symbol', 'change_existing_currency_symbol', 10, 2);
+
+	function change_existing_currency_symbol( $currency_symbol, $currency ) {
+	     switch( $currency ) {
+	          case 'đ': $currency_symbol = 'VNĐ$'; break;
+	     }
+	     return $currency_symbol;
+	}

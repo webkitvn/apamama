@@ -32,7 +32,7 @@ get_header( 'shop' ); ?>
 	  	);
 	  	$all_categories = get_categories( $args );	
 	?>
-	<?php if(!empty($all_categories)) : ?>
+	<?php if(!empty($all_categories) && is_product_category()) : ?>
 	<div class="container-fluid product-cats-wrapper">
 		<div class="row">
 			<div class="col-xs-12">
@@ -57,88 +57,110 @@ get_header( 'shop' ); ?>
 	</div>
 	<?php endif; ?>
 
-	<?php
-		/**
-		 * woocommerce_before_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
-		 * @hooked woocommerce_breadcrumb - 20
-		 */
-		do_action( 'woocommerce_before_main_content' );
-	?>
-
-		<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
-
-			<h1 class="page-title"><?php woocommerce_page_title(); ?></h1>
-
-		<?php endif; ?>
-
+	<div class="container-fluid main-content-wrapper">
+		<div class="row">
+			<div class="col-xs-12 col-md-3">
+			<!-- Side bar -->
+			<?php
+				/**
+				 * woocommerce_sidebar hook.
+				 *
+				 * @hooked woocommerce_get_sidebar - 10
+				 */
+				do_action( 'woocommerce_sidebar' );
+			?>
+			<!--END sidebar -->
+			</div>
+			<div class="col-xs-12 col-md-9">
 		<?php
 			/**
-			 * woocommerce_archive_description hook.
+			 * woocommerce_before_main_content hook.
 			 *
-			 * @hooked woocommerce_taxonomy_archive_description - 10
-			 * @hooked woocommerce_product_archive_description - 10
+			 * @hooked woocommerce_output_content_wrapper - 10 (outputs opening divs for the content)
+			 * @hooked woocommerce_breadcrumb - 20
 			 */
-			do_action( 'woocommerce_archive_description' );
+			do_action( 'woocommerce_before_main_content' );
 		?>
-
-
-
-		<?php if ( have_posts() ) : ?>
+		
+			<?php if ( apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
+		
+				<?php if(is_product_category()) : ?><h1 class="page-title"><?php woocommerce_page_title(); ?></h1><?php endif; ?>
+		
+			<?php endif; ?>
+		
 			<?php
 				/**
-				 * woocommerce_before_shop_loop hook.
+				 * woocommerce_archive_description hook.
 				 *
-				 * @hooked woocommerce_result_count - 20
-				 * @hooked woocommerce_catalog_ordering - 30
+				 * @hooked woocommerce_taxonomy_archive_description - 10
+				 * @hooked woocommerce_product_archive_description - 10
 				 */
-				do_action( 'woocommerce_before_shop_loop' );
+				do_action( 'woocommerce_archive_description' );
 			?>
+		
+		
+			<div class="container-fluid product-lists">
+			<?php if ( have_posts() ) : ?>
+				<div class="row result-ordering">
+					
+					<div class="col-xs-12">
+						<?php
+							/**
+							 * woocommerce_before_shop_loop hook.
+							 *
+							 * @hooked woocommerce_result_count - 20
+							 * @hooked woocommerce_catalog_ordering - 30
+							 */
+							do_action( 'woocommerce_before_shop_loop' );
+						?>
+							
+					</div><!--END result-ordering-->
 
-			<?php woocommerce_product_loop_start(); ?>
+				</div>
 
-				<?php woocommerce_product_subcategories(); ?>
+				<div class="row">
 
-				<?php while ( have_posts() ) : the_post(); ?>
+				<?php woocommerce_product_loop_start(); ?>
+		
+					<?php woocommerce_product_subcategories(); ?>
+		
+					<?php while ( have_posts() ) : the_post(); ?>
+		
+						<?php wc_get_template_part( 'content', 'product' ); ?>
+		
+					<?php endwhile; // end of the loop. ?>
+		
+				<?php woocommerce_product_loop_end(); ?>
 
-					<?php wc_get_template_part( 'content', 'product' ); ?>
-
-				<?php endwhile; // end of the loop. ?>
-
-			<?php woocommerce_product_loop_end(); ?>
-
-			<?php
-				/**
-				 * woocommerce_after_shop_loop hook.
-				 *
-				 * @hooked woocommerce_pagination - 10
-				 */
-				do_action( 'woocommerce_after_shop_loop' );
-			?>
-
-		<?php elseif ( ! woocommerce_product_subcategories( array( 'before' => woocommerce_product_loop_start( false ), 'after' => woocommerce_product_loop_end( false ) ) ) ) : ?>
-
-			<?php wc_get_template( 'loop/no-products-found.php' ); ?>
-
-		<?php endif; ?>
-
-	<?php
-		/**
-		 * woocommerce_after_main_content hook.
-		 *
-		 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
-		 */
-		do_action( 'woocommerce_after_main_content' );
-	?>
-
-	<?php
-		/**
-		 * woocommerce_sidebar hook.
-		 *
-		 * @hooked woocommerce_get_sidebar - 10
-		 */
-		do_action( 'woocommerce_sidebar' );
-	?>
+				</div><!--END products row-->
+				<div class="row">
+				<?php
+					/**
+					 * woocommerce_after_shop_loop hook.
+					 *
+					 * @hooked woocommerce_pagination - 10
+					 */
+					do_action( 'woocommerce_after_shop_loop' );
+				?>
+				</div>
+		
+			<?php elseif ( ! woocommerce_product_subcategories( array( 'before' => woocommerce_product_loop_start( false ), 'after' => woocommerce_product_loop_end( false ) ) ) ) : ?>
+		
+				<div class="row"><?php wc_get_template( 'loop/no-products-found.php' ); ?></div>
+		
+			<?php endif; ?>
+			</div><!--END product-lists-->
+		
+		<?php
+			/**
+			 * woocommerce_after_main_content hook.
+			 *
+			 * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
+			 */
+			do_action( 'woocommerce_after_main_content' );
+		?>
+			</div>
+		</div><!--end row-->
+	</div><!--END main-content-wrapper-->
 
 <?php get_footer( 'shop' ); ?>
