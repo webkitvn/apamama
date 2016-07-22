@@ -691,9 +691,6 @@ nav .menu{
 	background-color: #e22d6a;
 	color: #FFF;
 }
-.single-product .related .price{
-	font-size: 1.2em;
-}
 .woocommerce-message a{
 	border-radius: 0 !important;
 }
@@ -712,4 +709,34 @@ nav .menu{
 	background: none !important;
 	padding: 0 !important;
 	color: #FFF !important;
+}
+
+/*--- PAGINATION STYLE ---*/
+.woocommerce-pagination{
+	padding: 20px;
+	overflow: hidden;
+	text-align: center;
+}
+.woocommerce-pagination ul{
+	margin: 0;
+	padding: 0;
+}
+.woocommerce-pagination ul li{
+	display: inline-block;
+}
+.woocommerce-pagination li a, .woocommerce-pagination li span{
+	display: block;
+	min-width: 30px;
+	min-height: 30px;
+	line-height: 30px;
+	text-align: center;
+	border: 1px solid #DDD;
+	font-family: "sanfrancisco-bold";
+	color: #DDD;
+	transition: all .3s ease;
+}
+.woocommerce-pagination li a:hover, .woocommerce-pagination li span.current{
+	background-color: #e22d6a;
+	color: #FFF;
+	text-decoration: none;
 }
