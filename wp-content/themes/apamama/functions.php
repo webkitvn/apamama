@@ -6,6 +6,9 @@
 	//woocommerce support
 	remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 	remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
+	remove_action( 'woocommerce_before_single_product', 'wc_print_notices', 10 );
+	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
+
 	function apamama_wrapper_start(){
 		echo '<div class="main products-wrapper">';
 	}
@@ -37,10 +40,23 @@
 		'before_widget' => '<figure id="widget-sidebar %1$s" class="widget %2$s">',
 		'after_widget'  => "</figure>\n",
 		'before_title'  => '<h2 class="widget-title">',
-		'after_title'   => "</h2>\n",
+		'after_title'   => "</h2><div class='widget_cotent_wrapper' >\n",
 	);
 
 	register_sidebar( $args );
+
+	$single_args = array(
+		'name'          => 'Single Product Sidebar',
+		'id'            => "single-product-sidebar",
+		'description'   => 'Apamama Sidebar For Single Product',
+		'class'         => '',
+		'before_widget' => '<figure id="widget-sidebar %1$s" class="widget %2$s">',
+		'after_widget'  => "</figure>\n",
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => "</h2><div class='widget_cotent_wrapper' >\n",
+	);
+
+	register_sidebar( $single_args );
 
 	add_filter('woocommerce_currency_symbol', 'change_existing_currency_symbol', 10, 2);
 
