@@ -644,6 +644,9 @@ nav .menu{
 	padding: 5px 20px;
 	font-family: "sanfrancisco-medium";
 }
+.single-product .related .price{
+	font-size: 1.2em;
+}
 .product-img{
 	position: relative;
 	padding: 20px;
