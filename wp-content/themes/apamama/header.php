@@ -30,6 +30,10 @@
 								<li><a href="#">Bảo hành</a></li>
 								<li><a href="#">Tin tức</a></li>
 								<li><a href="#">Liên hệ</a></li>
+								<li><a href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>">
+									<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+									(<?php echo WC()->cart->get_cart_contents_count(); ?>)
+								</a></li>
 							</ul>
 						</div>
 					</nav>

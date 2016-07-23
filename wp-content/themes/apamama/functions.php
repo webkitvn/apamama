@@ -8,7 +8,7 @@
 	remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 	remove_action( 'woocommerce_before_single_product', 'wc_print_notices', 10 );
 	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
-
+	remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 10 );
 	function apamama_wrapper_start(){
 		echo '<div class="main products-wrapper">';
 	}

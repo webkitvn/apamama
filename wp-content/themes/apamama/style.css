@@ -698,10 +698,9 @@ nav .menu{
 	border-radius: 0 !important;
 }
 .woocommerce-error{
-	border: 1px dashed #DDD;
-	padding: 10px;
+	padding: 5px 10px;
 	margin: 20px 0;
-	background-color: #e22d6a;
+	background-color: #7d7d7d;
 }
 .woocommerce-error li{
 	margin-left: 20px;
@@ -742,4 +741,152 @@ nav .menu{
 	background-color: #e22d6a;
 	color: #FFF;
 	text-decoration: none;
+}
+
+/*---PAGE STYLE---*/
+.page .page-content{
+	background-color: #FFF;
+}
+.page-content .woocommerce-error{
+	margin: 20px;
+}
+.page-content .slogan{
+	padding: 50px 20px;
+	background: #666 url(img/slogan-bg.jpg);
+	background-size: cover;
+	color: #FFF;
+}
+/*---CART STYLE---*/
+.table-content{
+	padding: 20px;
+}
+.shop_table{
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+	border: 1px solid #DDD;
+}
+.shop_table thead{
+	font-weight: 900;
+    color: #ffffff;
+    background: #ea6153;
+}
+.shop_table thead tr th{
+	font-family: "sanfrancisco-bold";
+	font-size: 1.2em;
+	border-bottom: 1px;
+}
+.shop_table tbody tr{
+	background: #f6f6f6;
+}
+.shop_table tbody tr:nth-of-type(odd) {
+  background: #FFF;
+}
+.shop_table td{
+	vertical-align: middle !important;
+	font-family: "sanfrancisco-medium";
+}
+.shop_table td img{
+	width: 50px;
+	height: auto;
+	border: 1px solid #FFF;
+}
+.shop_table td input[type=number]{
+	background: rgba(255,255,255,.1);
+	border: 0;
+	padding: 5px;
+	width: 50px;
+	cursor: pointer;
+	border-radius: 3px;
+}
+.shop_table td input[type=number]:focus{
+	background-color: #FFF;
+	outline: none;
+}
+.shop_table td.product-remove{
+	text-align: center;
+	width: 50px;
+}
+.shop_table .product-remove a.remove{
+	display: inline-block;
+	font-family: "sanfrancisco-bold";
+	background-color: #DDD;
+	color: #FFF;
+	border-radius: 100%;
+	width: 25px;
+	height: 25px;
+	text-align: center;
+	line-height: 22px;
+	font-size: 1.5em;
+}
+.shop_table .product-remove a.remove:hover{
+	text-decoration: none;
+	background-color: #ea6153;
+}
+.shop_table .coupon{
+	float: left;
+}
+.shop_table .coupon label{
+	display: none;
+}
+.shop_table .coupon input.input-text{
+	padding: 5px;
+	border-radius: 3px;
+	border: 1px solid #DDD;
+}
+.shop_table .actions .coupon .button{
+	background-color: #444;
+	color: #FFF;
+	margin-left: 10px;
+}
+.shop_table .actions .coupon .button:hover{
+	background-color: #797979;
+}
+.shop_table .actions .button{
+	float: right;
+	background-color: #ea6153;
+	color: #FFF;
+}
+.shop_table .actions .button:hover{
+	background-color: #ff301b;
+}
+.shop_table .product-name a{
+	font-family: "sanfrancisco-bold";
+	color: #444;
+	text-transform: uppercase;
+}
+.shop_table .product-name a:hover{
+	color: #ea6153;
+	text-decoration: none;
+}
+.cart_totals h2{
+	background-color: #a510a5;
+	color: #FFF;
+	text-align: center;
+	padding: 10px;
+	margin: 0;
+	font-size: 1.3em;
+	font-family: "sanfrancisco-bold";
+}
+.cart_totals .shop_table{
+	margin-top: 0;
+}
+.cart_totals .shop_table tr{
+	font-size: 1.2em;
+	background-color: #FFF !important;
+
+}
+.cart_totals .shop_table tr th, .cart_totals .shop_table tr td{
+	padding: 15px 10px;
+}
+.cart_totals .checkout-button{
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 20px !important;
+	background-color: #ea6153 !important;
+	color: #FFF !important;
+	font-family: "sanfrancisco-bold";
+	font-size: 1.5em !important;
+}
+.cart_totals .checkout-button:hover{
+	background-color: #f33d2b !important;
 }
