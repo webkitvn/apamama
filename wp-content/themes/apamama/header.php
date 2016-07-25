@@ -24,7 +24,25 @@
 						<div class="menu">
 							<ul>
 								<li><a href="<?php echo bloginfo('home') ?>"><i class="fa fa-apple" aria-hidden="true"></i> Apamama</a></li>
-								<li><a href="#">iPhone</a></li>
+								<li>
+									<a href="<?php echo get_term_link('iphone', 'product_cat') ?>">iPhone</a>
+									<?php
+										$args = array(
+									        'taxonomy'     => 'product_cat',
+									        'orderby'      => 'name',
+									        'hide_empty'   => 1,
+									        'parent' => 9
+									  	);
+									  	$categories = get_categories( $args );
+									  	if(!empty($categories)) :
+									?>
+									<ul class="submenu">
+										<?php foreach($categories as $cat) : ?>
+										<li><a href="<?php echo get_term_link($cat->slug, 'product_cat') ?>"><?php echo $cat->name ?></a></li>
+										<?php endforeach; ?>
+									</ul>
+									<?php endif; ?>
+								</li>
 								<li><a href="#">iPad</a></li>
 								<li><a href="#">Ốp lưng</a></li>
 								<li><a href="#">Bảo hành</a></li>
@@ -32,7 +50,7 @@
 								<li><a href="#">Liên hệ</a></li>
 								<li><a href="<?php echo WC()->cart->get_cart_url(); ?>" title="<?php _e( 'View your shopping cart' ); ?>">
 									<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-									(<?php echo WC()->cart->get_cart_contents_count(); ?>)
+									<small>(<?php echo WC()->cart->get_cart_contents_count(); ?>)</small>
 								</a></li>
 							</ul>
 						</div>

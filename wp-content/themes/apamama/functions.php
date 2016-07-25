@@ -66,3 +66,24 @@
 	     }
 	     return $currency_symbol;
 	}
+
+	// Hook in
+	add_filter( 'woocommerce_checkout_fields' , 'apamama_custom_override_checkout_fields' );
+
+	// Our hooked in function - $fields is passed via the filter!
+	function apamama_custom_override_checkout_fields( $fields ) {
+	    //unset($fields['order']['order_comments']);
+	    unset($fields['billing']['billing_company']);
+	    unset($fields['billing']['billing_country']);
+	    unset($fields['billing']['billing_postcode']);
+	    return $fields;
+	}
+	function register_my_menus() {
+	  register_nav_menus(
+	    array(
+	      'main-menu' => __("Main Menu"),
+	      //'secondary-menu' => __("Secondary Menu")
+	    )
+	  );
+	}
+	add_action( 'init', 'register_my_menus' );

@@ -44,33 +44,58 @@ nav .menu{
     position: relative;
     z-index: 2;
 }
-.menu ul{
+.menu > ul{
 	margin: 0;
 	padding: 0;
 	list-style: none;
     white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
 }
-.menu ul li{
+.menu > ul > li{
 	display: inline-block;
 	padding: 5px 30px 7px;
+	position: relative;
 }
-.menu ul li a{
+.menu > ul > li > a{
 	color: #FFF;
 	display: inline-block;
 	font-size: .9em;
 	transition: all .3s ease;
 }
-.menu ul li a:hover{
+.menu > ul > li > a:hover{
 	text-decoration: none;
 	opacity: 0.65;
 }
-.menu ul li:first-child{
+.menu > ul > li:first-child{
 	padding-left: 0
 }
-.menu ul li:last-child{
+.menu > ul > li:last-child{
 	padding-right: 0;
+}
+.menu > ul > li:hover .submenu{
+	display: block;
+}
+.menu .submenu{
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	top: 37px;
+	display: none;
+
+}
+.menu .submenu li a{
+	display: block;
+	color: #FFF;
+	font-size: 14px;
+	text-align: left;
+	padding: 5px 20px;
+	border-bottom: 1px solid rgba(255,255,255,.1);
+	background: rgba(0,0,0,0.8);
+	transition: all .3s ease;
+}
+.menu .submenu li a:hover{
+	text-decoration: none;
+	background: rgba(0,0,0,0.9);
 }
 .promos{
 	border-bottom: 2px solid #FFF;
@@ -690,8 +715,7 @@ nav .menu{
 .woocommerce-message{
 	margin: 20px 0;
 	padding: 10px;
-	border: 1px dashed #DDD;
-	background-color: #e22d6a;
+	background-color: #dc185a;
 	color: #FFF;
 }
 .woocommerce-message a{
@@ -711,6 +735,7 @@ nav .menu{
 	background: none !important;
 	padding: 0 !important;
 	color: #FFF !important;
+	font-weight: bold;
 }
 
 /*--- PAGINATION STYLE ---*/
@@ -752,9 +777,29 @@ nav .menu{
 }
 .page-content .slogan{
 	padding: 50px 20px;
-	background: #666 url(img/slogan-bg.jpg);
+	background: #666 url(img/slogan-bg.jpg) center right;
 	background-size: cover;
 	color: #FFF;
+	text-align: center;
+	border-top: 1px solid #FFF;
+}
+.page-content .slogan span{
+	text-align: center;
+}
+.page-content .slogan span span{
+	display: inline-block;
+	background-color: #111;
+	padding: 10px;
+	min-width: 250px;
+	font-size: 20px;
+	font-family: "sanfrancisco-bold";
+}
+.page-content .slogan span i{
+	margin-right: 20px;
+}
+.page-content .slogan .active{
+	background-color: #FFF;
+	color: #ea6153;
 }
 /*---CART STYLE---*/
 .table-content{
@@ -858,7 +903,7 @@ nav .menu{
 	text-decoration: none;
 }
 .cart_totals h2{
-	background-color: #a510a5;
+	background-color: #444;
 	color: #FFF;
 	text-align: center;
 	padding: 10px;
@@ -889,4 +934,132 @@ nav .menu{
 }
 .cart_totals .checkout-button:hover{
 	background-color: #f33d2b !important;
+}
+.cart-empty{
+	padding-top: 50px;
+}
+.return-to-shop{
+	padding-bottom: 50px;
+}
+.cart-empty, .return-to-shop{
+	text-align: center;
+}
+/*---CHECKOUT STYLE---*/
+.woocommerce-checkout .woocommerce-info{
+	padding: 20px 20px 10px;
+	font-family: "sanfrancisco-medium";
+	font-size: 1.5em;
+}
+.woocommerce-checkout .woocommerce-info a{
+	color: #ea6153;
+}
+.woocommerce-checkout .checkout_coupon{
+	padding: 10px 20px 20px;
+}
+form.woocommerce-checkout{
+	border-top: 1px solid #DDD;
+}
+.woocommerce-checkout .checkout_coupon input[type=text]{
+	padding: 5px;
+    border-radius: 3px;
+    border: 1px solid #DDD;
+    float: left;
+    margin-right: 10px;
+}
+.woocommerce-checkout .checkout_coupon input[type=submit]{
+	background-color: #444;
+	color: #FFF;
+}
+.woocommerce-checkout .customer-details{
+	padding: 0 20px;
+	border-right: 1px solid #DDD;
+	background: #FAFAFA;
+}
+.woocommerce-checkout .order-review{
+	padding: 0 20px;
+}
+.woocommerce-checkout h3{
+	font-family: "sanfrancisco-bold";
+	text-transform: uppercase;
+	margin: 0;
+	padding: 20px 0;
+}
+.woocommerce-checkout .customer-details label{
+	display: block;
+}
+.woocommerce-checkout .customer-details input[type=text],
+.woocommerce-checkout .customer-details input[type=email],
+.woocommerce-checkout .customer-details input[type=tel],
+.woocommerce-checkout .customer-details textarea{
+	width: 100%;
+	border: 1px solid #DDD;
+	padding: 5px;
+	border-radius: 3px;
+}
+.woocommerce-checkout .select2-chosen{
+	padding: 5px;
+}
+.woocommerce-checkout .order-review #place_order{
+	display: block;
+	width: 100%;
+	text-align: center;
+	padding: 20px !important;
+	background-color: #383838 !important;
+	color: #FFF !important;
+	font-family: "sanfrancisco-bold";
+	font-size: 1.5em !important;
+}
+.woocommerce-checkout .order-review #place_order:hover{
+	background-color: #1f1f1f !important;
+}
+
+/*---THANKYOU ORDER STYLE---*/
+.thankyou-order{
+	max-width: 700px;
+	margin: 20px auto;
+	padding: 20px;
+	border: 1px solid #DDD;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.thankyou-order .shop_table{
+	box-shadow: none;
+}
+.thankyou-order .order_details {
+    margin: 0 0 1.5em;
+    list-style: none;
+    overflow: hidden;
+}
+.thankyou-order .order_details li {
+    float: left;
+    margin-right: 2em;
+    text-transform: uppercase;
+    font-size: .715em;
+    line-height: 1;
+    border-right: 1px dashed #d3ced2;
+    padding-right: 2em;
+    margin-left: 0;
+    padding-left: 0;
+    list-style-type: none;
+}
+.thankyou-order .order_details li strong {
+    display: block;
+    font-size: 1.4em;
+    text-transform: none;
+    line-height: 1.5;
+}
+.thankyou-order .order_details li:last-of-type {
+    border: none;
+}
+.thankyou-order .clear{
+	float: none;
+	clear: both;
+}
+.thankyou-order h2{
+	font-family: "sanfrancisco-bold";
+	text-transform: uppercase;
+	font-size: 1.5em;
+}
+.cart-item:before{
+	content: "\f07a";
+	font-family: "FontAwesome";
 }

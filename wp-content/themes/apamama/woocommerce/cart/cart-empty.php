@@ -24,6 +24,8 @@ wc_print_notices();
 
 ?>
 
+
+
 <p class="cart-empty">
 	<?php _e( 'Your cart is currently empty.', 'woocommerce' ) ?>
 </p>
@@ -37,3 +39,4 @@ wc_print_notices();
 		</a>
 	</p>
 <?php endif; ?>
+

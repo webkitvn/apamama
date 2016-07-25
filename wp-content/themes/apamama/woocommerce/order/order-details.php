@@ -26,7 +26,7 @@ $show_purchase_note    = $order->has_status( apply_filters( 'woocommerce_purchas
 $show_customer_details = is_user_logged_in() && $order->get_user_id() === get_current_user_id();
 ?>
 <h2><?php _e( 'Order Details', 'woocommerce' ); ?></h2>
-<table class="shop_table order_details">
+<table class="table shop_table order_details">
 	<thead>
 		<tr>
 			<th class="product-name"><?php _e( 'Product', 'woocommerce' ); ?></th>
