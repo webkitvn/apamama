@@ -1,6 +1,6 @@
 <?php get_header() ?>
 	<?php while(have_posts()) : the_post(); ?>
-		<div class="container-fluid">
+		<div class="container">
 			<div class="page-content">
 				<?php if(is_cart()) : ?>
 					<div class="slogan">

@@ -1,12 +1,32 @@
 <?php
+	if ( function_exists( 'add_theme_support' ) ) { 
+		add_theme_support( 'post-thumbnails', array('page', 'post'));
+		set_post_thumbnail_size(380, 240, true ); // default Post Thumbnail dimensions (cropped)
 
-	
+	}
+	if ( function_exists( 'add_image_size' ) ) { 
+		add_image_size('cate_banner', 1200, 300, true);
+	}
+
+	//excerpt length
+	function custom_excerpt_length( $length ) {
+		return 30;
+	}
+	add_filter( 'excerpt_length', 'custom_excerpt_length', 999 );
+
+	function new_excerpt_more($more) {
+		return '...';
+	}
+	add_filter('excerpt_more', 'new_excerpt_more');
+
+
 	add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
 
 	//woocommerce support
 	remove_action('woocommerce_before_main_content', 'woocommerce_output_content_wrapper', 10);
 	remove_action('woocommerce_after_main_content', 'woocommerce_output_content_wrapper_end', 10);
 	remove_action( 'woocommerce_before_single_product', 'wc_print_notices', 10 );
+	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_upsell_display', 15 );
 	remove_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display', 10 );
 	function apamama_wrapper_start(){
@@ -57,6 +77,19 @@
 	);
 
 	register_sidebar( $single_args );
+
+	$news_args = array(
+		'name'          => 'News Sidebar',
+		'id'            => "news-sidebar",
+		'description'   => 'Apamama Sidebar For News',
+		'class'         => '',
+		'before_widget' => '<figure id="widget-sidebar %1$s" class="widget %2$s">',
+		'after_widget'  => "</figure>\n",
+		'before_title'  => '<h2 class="widget-title">',
+		'after_title'   => "</h2><div class='widget_cotent_wrapper' >\n",
+	);
+
+	register_sidebar( $news_args );
 
 	add_filter('woocommerce_currency_symbol', 'change_existing_currency_symbol', 10, 2);
 

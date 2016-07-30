@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 get_header( 'shop' ); ?>
-
+	
 	<?php 
 		$category = get_queried_object();
 		$args = array(
@@ -32,8 +32,22 @@ get_header( 'shop' ); ?>
 	  	);
 	  	$all_categories = get_categories( $args );	
 	?>
+	<?php if(is_product_category()) : ?>
+		<?php 
+			$image = get_field('category_banner', $category->taxonomy.'_'.$category->term_id);
+			if($image) :
+		?>
+		<div class="container cate-banner">
+			<div class="row">
+				<div class="col-xs-12">
+					<img src="<?php echo $image['sizes']['cate_banner'] ?>" alt="<?php echo $category->name ?>">
+				</div>
+			</div>
+		</div>
+		<?php endif; ?>
+	<?php endif; ?>
 	<?php if(!empty($all_categories) && is_product_category()) : ?>
-	<div class="container-fluid product-cats-wrapper">
+	<div class="container product-cats-wrapper">
 		<div class="row">
 			<div class="col-xs-12">
 				<ul class="product-cats">
@@ -57,7 +71,7 @@ get_header( 'shop' ); ?>
 	</div>
 	<?php endif; ?>
 
-	<div class="container-fluid main-content-wrapper">
+	<div class="container main-content-wrapper">
 		<div class="row">
 			<aside class="col-xs-12 col-md-3">
 			<!-- Side bar -->
@@ -95,7 +109,7 @@ get_header( 'shop' ); ?>
 				 * @hooked woocommerce_taxonomy_archive_description - 10
 				 * @hooked woocommerce_product_archive_description - 10
 				 */
-				do_action( 'woocommerce_archive_description' );
+				//do_action( 'woocommerce_archive_description' );
 			?>
 		
 		

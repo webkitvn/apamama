@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 get_header( 'shop' ); ?>
 
-	<div class="container-fluid main-content-wrapper">
+	<div class="container main-content-wrapper">
 		<div class="row">
 			<aside class="col-xs-12 col-md-3">
 			<!-- Side bar -->

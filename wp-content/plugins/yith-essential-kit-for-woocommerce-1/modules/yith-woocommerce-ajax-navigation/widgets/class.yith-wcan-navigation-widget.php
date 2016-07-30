@@ -67,6 +67,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
             $is_parent_class    = 'yit-wcan-parent-terms';
             $is_chosen_class    = 'chosen';
             $terms_type_list    = ( isset( $instance['display'] ) ) ? $instance['display'] : 'all';
+            $in_array_function = apply_filters( 'yith_wcan_in_array_ignor_case', false ) ? 'yit_in_array_ignore_case' : 'in_array';
 
             $instance['attribute']      = empty( $instance['attribute'] ) ? '' : $instance['attribute'];
             $instance['extra_class']    = empty( $instance['extra_class'] ) ? '' : $instance['extra_class'];
@@ -159,12 +160,12 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         set_transient( $transient_name, $_products_in_term );
                         //}
 
-                        $option_is_set = ( isset( $_chosen_attributes[$taxonomy] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) );
+                        $option_is_set = ( isset( $_chosen_attributes[$taxonomy] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) );
 
                         // If this is an AND query, only show options with count > 0
                         if ( $query_type == 'and' ) {
 
-                            $count = sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->filtered_product_ids ) );
+                            $count = sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->layered_nav_product_ids ) );
 
                             // skip the term for the current archive
                             if ( $current_term == $term->$filter_term_field ) {
@@ -206,7 +207,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
 
                         $current_filter = array_map( 'esc_attr', $current_filter );
 
-                        if ( ! in_array( $term->$filter_term_field, $current_filter ) ) {
+                        if ( ! $in_array_function( $term->$filter_term_field, $current_filter ) ) {
                             $current_filter[] = $term->$filter_term_field;
                         }
 
@@ -218,7 +219,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                                 if ( $name !== $taxonomy ) {
 
                                     // Exclude query arg for current term archive term
-                                    while ( in_array( $current_term, $data['terms'] ) ) {
+                                    while ( $in_array_function( $current_term, $data['terms'] ) ) {
                                         $key = array_search( $current_term, $data );
                                         unset( $data['terms'][$key] );
                                     }
@@ -268,7 +269,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         // Current Filter = this widget
-                        if ( isset( $_chosen_attributes[$taxonomy] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) {
+                        if ( isset( $_chosen_attributes[$taxonomy] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) {
 
                             $class = ( $terms_type_list == 'hierarchical' && yit_term_is_child( $term ) ) ? "class='{$is_chosen_class}  {$is_child_class}'" : "class='{$is_chosen_class}'";
 
@@ -297,7 +298,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         // Query type Arg
-                        if ( $query_type == 'or' && ! ( sizeof( $current_filter ) == 1 && isset( $_chosen_attributes[$taxonomy]['terms'] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) ) {
+                        if ( $query_type == 'or' && ! ( sizeof( $current_filter ) == 1 && isset( $_chosen_attributes[$taxonomy]['terms'] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) ) {
                             $link = add_query_arg( 'query_type_' . sanitize_title( $instance['attribute'] ), 'or', $link );
                         }
 
@@ -335,12 +336,12 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         set_transient( $transient_name, $_products_in_term );
                         //}
 
-                        $option_is_set = ( isset( $_chosen_attributes[$taxonomy] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) );
+                        $option_is_set = ( isset( $_chosen_attributes[$taxonomy] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) );
 
                         // If this is an AND query, only show options with count > 0
                         if ( $query_type == 'and' ) {
 
-                            $count = sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->filtered_product_ids ) );
+                            $count = sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->layered_nav_product_ids ) );
 
                             // skip the term for the current archive
                             if ( $current_term == $term->$filter_term_field ) {
@@ -382,7 +383,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
 
                         $current_filter = array_map( 'esc_attr', $current_filter );
 
-                        if ( ! in_array( $term->$filter_term_field, $current_filter ) ) {
+                        if ( ! $in_array_function( $term->$filter_term_field, $current_filter ) ) {
                             $current_filter[] = $term->$filter_term_field;
                         }
 
@@ -394,7 +395,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                                 if ( $name !== $taxonomy ) {
 
                                     // Exclude query arg for current term archive term
-                                    while ( in_array( $current_term, $data['terms'] ) ) {
+                                    while ( $in_array_function( $current_term, $data['terms'] ) ) {
                                         $key = array_search( $current_term, $data );
                                         unset( $data['terms'][$key] );
                                     }
@@ -444,7 +445,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         // Current Filter = this widget
-                        if ( isset( $_chosen_attributes[$taxonomy] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) {
+                        if ( isset( $_chosen_attributes[$taxonomy] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) {
 
                             $class = ( $terms_type_list == 'hierarchical' && yit_term_is_child( $term ) ) ? "class='{$is_chosen_class}  {$is_child_class}'" : "class='{$is_chosen_class}'";
 
@@ -470,7 +471,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         // Query type Arg
-                        if ( $query_type == 'or' && ! ( sizeof( $current_filter ) == 1 && isset( $_chosen_attributes[$taxonomy]['terms'] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) ) {
+                        if ( $query_type == 'or' && ! ( sizeof( $current_filter ) == 1 && isset( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) ) {
                             $link = add_query_arg( 'query_type_' . sanitize_title( $instance['attribute'] ), 'or', $link );
                         }
 
@@ -509,12 +510,12 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         set_transient( $transient_name, $_products_in_term );
                         //}
 
-                        $option_is_set = ( isset( $_chosen_attributes[$taxonomy] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) );
+                        $option_is_set = ( isset( $_chosen_attributes[$taxonomy] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) );
 
                         // If this is an AND query, only show options with count > 0
                         if ( $query_type == 'and' ) {
 
-                            $count = sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->filtered_product_ids ) );
+                            $count = sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->layered_nav_product_ids ) );
 
                             // skip the term for the current archive
                             if ( $current_term == $term->$filter_term_field ) {
@@ -556,7 +557,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
 
                         $current_filter = array_map( 'esc_attr', $current_filter );
 
-                        if ( ! in_array( $term->$filter_term_field, $current_filter ) ) {
+                        if ( ! $in_array_function( $term->$filter_term_field, $current_filter ) ) {
                             $current_filter[] = $term->$filter_term_field;
                         }
 
@@ -568,7 +569,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                                 if ( $name !== $taxonomy ) {
 
                                     // Exclude query arg for current term archive term
-                                    while ( in_array( $current_term, $data['terms'] ) ) {
+                                    while ( $in_array_function( $current_term, $data['terms'] ) ) {
                                         $key = array_search( $current_term, $data );
                                         unset( $data['terms'][$key] );
                                     }
@@ -618,7 +619,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         // Current Filter = this widget
-                        if ( isset( $_chosen_attributes[$taxonomy] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) {
+                        if ( isset( $_chosen_attributes[$taxonomy] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) {
 
                             $class = ( $terms_type_list == 'hierarchical' && yit_term_is_child( $term ) ) ? "class='{$is_chosen_class}  {$is_child_class}'" : "class='{$is_chosen_class}'";
 
@@ -647,7 +648,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         }
 
                         // Query type Arg
-                        if ( $query_type == 'or' && ! ( sizeof( $current_filter ) == 1 && isset( $_chosen_attributes[$taxonomy]['terms'] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && in_array( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) ) {
+                        if ( $query_type == 'or' && ! ( sizeof( $current_filter ) == 1 && isset( $_chosen_attributes[$taxonomy]['terms'] ) && is_array( $_chosen_attributes[$taxonomy]['terms'] ) && $in_array_function( $term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms'] ) ) ) {
                             $link = add_query_arg( 'query_type_' . sanitize_title( $instance['attribute'] ), 'or', $link );
                         }
 
@@ -678,7 +679,6 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                 
                 if ( ! $this->found ) {
                     ob_end_clean();
-                    echo substr( $before_widget, 0, strlen( $before_widget ) - 1 ) . ' style="display:none">' . $after_widget;
                 }
                 else {
                     echo ob_get_clean();
@@ -859,6 +859,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
 
         public function get_list_html( $terms, $taxonomy, $query_type, $display_type, $instance, $terms_type_list, $current_term, $args, $is_child_class, $is_parent_class, $is_chosen_class, $level = 0, $filter_term_field = 'slug' ){
             $_chosen_attributes = YITH_WCAN()->get_layered_nav_chosen_attributes();
+            $in_array_function = apply_filters( 'yith_wcan_in_array_ignor_case', false ) ? 'yit_in_array_ignore_case' : 'in_array';
             foreach ( $terms as $parent_id => $term_ids ) {
                 $term = get_term_by( 'id', $parent_id, $taxonomy );
 
@@ -869,11 +870,11 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                 if( 'tags' == $instance['type'] ) {
                     $term_id = yit_wcan_localize_terms( $term->term_id, $taxonomy );
                     if ( 'exclude' ==  $instance['tags_list_query'] ){
-                        $echo = ! in_array( $term_id, $exclude );
+                        $echo = ! $in_array_function( $term_id, $exclude );
                     }
 
                     elseif ( 'include' ==  $instance['tags_list_query'] ){
-                        $echo = in_array( $term_id, $include );
+                        $echo = $in_array_function( $term_id, $include );
                     }
                 }
 
@@ -895,7 +896,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                     set_transient($transient_name, $_products_in_term);
                     //}
 
-                    $option_is_set = (isset($_chosen_attributes[$taxonomy]) && in_array($term->term_id, $_chosen_attributes[$taxonomy]['terms']));
+                    $option_is_set = (isset($_chosen_attributes[$taxonomy]) && $in_array_function($term->term_id, $_chosen_attributes[$taxonomy]['terms']));
 
                     $term_param = apply_filters('yith_wcan_term_param_uri', $term->$filter_term_field, $display_type, $term);
 
@@ -923,7 +924,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
 
                     $current_filter = array_map('esc_attr', $current_filter);
 
-                    if (!in_array($term_param, $current_filter)) {
+                    if ( ! $in_array_function( $term_param, $current_filter ) ) {
                         $current_filter[] = $term_param;
                     }
 
@@ -935,7 +936,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                             if ($name !== $taxonomy) {
 
                                 // Exclude query arg for current term archive
-                                while (in_array($term->slug, $data['terms'])) {
+                                while ($in_array_function($term->slug, $data['terms'])) {
                                     $key = array_search($current_term, $data);
                                     unset($data['terms'][$key]);
                                 }
@@ -985,7 +986,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                         );
                     }
 
-                    $check_for_current_widget = isset($_chosen_attributes[$taxonomy]) && is_array($_chosen_attributes[$taxonomy]['terms']) && in_array($term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms']);
+                    $check_for_current_widget = isset($_chosen_attributes[$taxonomy]) && is_array($_chosen_attributes[$taxonomy]['terms']) && $in_array_function($term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms']);
                     $class = '';
 
                     // Current Filter = this widget
@@ -1041,7 +1042,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                     $is_attribute = apply_filters('yith_wcan_is_attribute_check', true);
 
                     // Query type Arg
-                    if ($is_attribute && $query_type == 'or' && !(sizeof($current_filter) == 1 && isset($_chosen_attributes[$taxonomy]['terms']) && is_array($_chosen_attributes[$taxonomy]['terms']) && in_array($term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms']))) {
+                    if ($is_attribute && $query_type == 'or' && !(sizeof($current_filter) == 1 && isset($_chosen_attributes[$taxonomy]['terms']) && is_array($_chosen_attributes[$taxonomy]['terms']) && $in_array_function($term->$filter_term_field, $_chosen_attributes[$taxonomy]['terms']))) {
                         $link = add_query_arg('query_type_' . sanitize_title($instance['attribute']), 'or', $link);
                     }
 

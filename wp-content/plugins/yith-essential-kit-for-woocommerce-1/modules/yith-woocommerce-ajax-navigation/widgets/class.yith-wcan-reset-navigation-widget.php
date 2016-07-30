@@ -81,7 +81,7 @@ if ( ! class_exists( 'YITH_WCAN_Reset_Navigation_Widget' ) ) {
             }
             else {
                 ob_end_clean();
-                echo substr( $before_widget, 0, strlen( $before_widget ) - 1 ) . ' style="display:none">' . $after_widget;
+                printf( '%s%s', str_replace( '>',  ' style="display:none">', $before_widget ), $after_widget );
             }
         }
 

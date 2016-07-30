@@ -4,7 +4,7 @@ Contributors: yithemes
 Tags: woocommerce,yith woocommerce colors and labels variations,yith woocommerce zoom magnifier,yith woocommerce wishlist,yith woocommerce ajax product filter,yith woocommerce ajax search,yith woocommerce catalog mode,yith woocommerce advanced reviews, yith woocommerce badges management,yith woocommerce cart messages,yith woocommerce review reminder,yith woocommerce quick view,yith woocommerce mailchimp,yith woocommerce stripe,yith woocommerce request a quote,yith woocommerce tab manager,yith woocommerce multi vendor
 Requires at least: 3.5.1
 Tested up to: 4.5.2
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -154,6 +154,10 @@ You can get additional features of the plugins installed with the premium versio
 YITH Essential Kit for WooCommerce #1 will add a new submenu called "YITH Essential Kit for WooCommerce #1" under "YIT Plugins" menu. Here you are able to activate/deactivate all the plugins within.
 
 == Changelog ==
+
+= 1.3.2 =
+
+* Updated: YITH WooCommerce Ajax Navigation to 3.0.6 version
 
 = 1.3.1 =
 
@@ -332,4 +336,4 @@ YITH Essential Kit for WooCommerce #1 will add a new submenu called "YITH Essent
 
 == Upgrade Notice ==
 
-Last Stable Tag 1.3.1
+Last Stable Tag 1.3.2

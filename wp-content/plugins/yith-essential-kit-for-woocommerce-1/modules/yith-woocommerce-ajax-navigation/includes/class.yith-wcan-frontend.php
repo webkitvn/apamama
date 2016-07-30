@@ -133,8 +133,14 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                 // Get main query
                 $current_wp_query = $this->select_query_object( $query );
 
-                // Get WP Query for current page (without 'paged')
-                unset( $current_wp_query['paged'] );
+                if( is_array( $current_wp_query ) ){
+                    // Get WP Query for current page (without 'paged')
+                    unset( $current_wp_query['paged'] );
+                }
+
+                else {
+                    $current_wp_query = array();
+                }
 
                 // Ensure filters are set
                 $unfiltered_args = array_merge(

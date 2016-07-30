@@ -472,7 +472,7 @@ if ( ! function_exists( 'yit_get_woocommerce_layered_nav_link' ) ) {
      */
     function yit_get_woocommerce_layered_nav_link() {
         $return = false;
-        if ( defined( 'SHOP_IS_ON_FRONT' ) || ( is_shop() && ! is_product_category()  ) ) {
+        if ( defined( 'SHOP_IS_ON_FRONT' ) || ( is_shop() && ! is_product_category() ) ) {
             $taxonomy           = get_query_var( 'taxonomy' );
             $brands_taxonomy    = yit_get_brands_taxonomy();
             $return             = get_post_type_archive_link( 'product' );
@@ -496,12 +496,13 @@ if ( ! function_exists( 'yit_get_woocommerce_layered_nav_link' ) ) {
             }
 
             else {
-                $return = get_term_link( get_query_var( 'term' ), $taxonomy );
+                $term = get_query_var( 'term' );
+                $return = get_term_link( yith_wcan_is_product_attribute() && is_numeric( $term ) ? intval( $term ) : $term, $taxonomy ); 
             }
-
+            
             return apply_filters( 'yith_wcan_untrailingslashit', true ) && is_string( $return ) ? untrailingslashit( $return ) : $return;
         }
-
+        
         return $return;
     }
 }
@@ -672,5 +673,31 @@ if( ! function_exists( 'yit_plus_character_hack' ) ) {
      */
     function yit_plus_character_hack($link) {
         return $link = str_replace('+', '%2B', $link);
+    }
+}
+
+if( ! function_exists( 'yit_in_array_ignore_case' ) ) {
+    /**
+     * Case insensitive version of in array function
+     *
+     * @return bool
+     *
+     * @since    2.8.6
+     * @author   Andrea Grillo <andrea.grillo@yithemes.com>
+     */
+    function yit_in_array_ignore_case( $needle, $haystack ) {
+        return in_array(strtolower($needle), array_map('strtolower', $haystack));
+    }
+}
+
+if( !function_exists( 'yith_wcan_is_product_attribute' ) ) {
+    /**
+     * Return true when on an attribute archive page
+     *
+     * @param string $attribute
+     * @return bool
+     */
+    function yith_wcan_is_product_attribute( $attribute = '' ) {
+        return preg_match( '/pa_' . $attribute . '.*/', get_query_var( 'taxonomy' ) );
     }
 }
