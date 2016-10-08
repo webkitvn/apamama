@@ -324,7 +324,7 @@
             self.IMG_smallImage = new Image();
             self.IMG_smallImage.src = self.zoomImage.attr('src');
 
-            if ($.browser.msie && $.browser.version == 8) {
+            if ($.browser && $.browser.msie && $.browser.version == 8) {
                 $(self.IMG_zoomImage).load(function () {
 
                     self._initTrap();

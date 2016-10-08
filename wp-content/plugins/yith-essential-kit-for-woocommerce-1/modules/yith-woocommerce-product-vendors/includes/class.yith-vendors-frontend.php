@@ -57,6 +57,11 @@ if ( ! class_exists( 'YITH_Vendors_Frontend' ) ) {
 
             /* MyAccount -> My Order: Disable suborder view */
             add_filter( 'woocommerce_my_account_my_orders_query', array( $this, 'my_account_my_orders_query' ) );
+
+            add_filter( 'woocommerce_customer_get_downloadable_products' , array( $this ,'get_downloadable_products' ) );
+
+            /* Support to Adventure Tours Product Type */
+            class_exists( 'WC_Tour_WP_Query' ) && add_filter( 'yith_wcmv_vendor_get_products_query_args', array( $this, 'add_wc_tour_query_type' ) );
         }
 
         /**
@@ -268,6 +273,47 @@ if ( ! class_exists( 'YITH_Vendors_Frontend' ) ) {
         public function my_account_my_orders_query( $query_args ){
             $query_args['post_parent'] = 0;
             return $query_args;
+        }
+
+        /**
+         * Filter download permission (show only parent order)
+         * 
+         * @author Salvatore Strano
+         * @param $downloads
+         * @return array
+         */
+        public function get_downloadable_products( $downloads ){
+
+            $new_downloads = array();
+
+            foreach ( $downloads as $download ){
+
+                $order_id = $download['order_id'];
+                $order = wc_get_order( $order_id );
+
+                //show only parent order download 
+               
+                if( $order->post->post_parent == 0 ){
+                    $new_downloads[] = $download;
+                }
+
+            }
+
+            return $new_downloads;
+        }
+
+        /**
+         * Add Support to Adventure Tours Product Type
+         *
+         * Add the correct wc_query arg to get_posts array
+         *
+         * @author Andrea Grillo <andrea.grillo@yithemes.com>
+         * @since 1.9.13
+         * @return $args array WP_Query array
+         */
+        public function add_wc_tour_query_type( $args ){
+            $args['wc_query'] = 'tours';
+            return $args;
         }
     }
 }

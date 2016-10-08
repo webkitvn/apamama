@@ -17,17 +17,17 @@ return apply_filters( 'yith_wpv_panel_commissions_options', array(
             ),
 
             'commissions_options_title'          => array(
-                'title' => __( 'General settings', 'yith_wc_product_vendors' ),
+                'title' => __( 'General settings', 'yith-woocommerce-product-vendors' ),
                 'type'  => 'title',
                 'desc'  => '',
                 'id'    => 'yith_wpv_commissions_options_title'
             ),
 
             'commissions_options_base_commission' => array(
-                'title'             => __( 'Commission Base', 'yith_wc_product_vendors' ),
+                'title'             => __( 'Commission Base', 'yith-woocommerce-product-vendors' ),
                 'type'              => 'number',
                 'default'           => 50,
-                'desc'              => __( 'Default commission percentage', 'yith_wc_product_vendors' ),
+                'desc'              => __( 'Default commission percentage', 'yith-woocommerce-product-vendors' ),
                 'id'                => 'yith_vendor_base_commission',
                 'css'               => 'width:55px;',
                 'custom_attributes' => array(

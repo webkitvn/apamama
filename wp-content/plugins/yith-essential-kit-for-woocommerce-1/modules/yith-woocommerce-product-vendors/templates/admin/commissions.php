@@ -21,7 +21,7 @@
 
     <form id="commissions-filter" method="get">
         <input type="hidden" name="page" value="<?php echo $_REQUEST['page'] ?>" />
-        <?php $commissions_table->add_search_box( __( 'Search commissions', 'yith_wc_product_vendors' ), 's' ); ?>
+        <?php $commissions_table->add_search_box( __( 'Search commissions', 'yith-woocommerce-product-vendors' ), 's' ); ?>
         <?php $commissions_table->display(); ?>
     </form>
 </div>

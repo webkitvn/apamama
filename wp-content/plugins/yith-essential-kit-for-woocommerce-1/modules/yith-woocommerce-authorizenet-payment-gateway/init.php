@@ -3,7 +3,7 @@
  * Plugin Name: YITH WooCommerce Authorize.net Payment Gateway
  * Plugin URI: http://yithemes.com/themes/plugins/yith-woocommerce-authorize-net/
  * Description: YITH WooCommerce Authorize.net allows you to add Authorize.net payment gateway to WooCommerce
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: Yithemes
  * Author URI: http://yithemes.com/
  * Text Domain: yith-wcauthnet
@@ -45,7 +45,7 @@ if ( ! defined( 'YITH_WCAUTHNET' ) ) {
 }
 
 if( ! defined( 'YITH_WCAUTHNET_VERSION' ) ){
-	define( 'YITH_WCAUTHNET_VERSION', '1.0.9' );
+	define( 'YITH_WCAUTHNET_VERSION', '1.0.10' );
 }
 
 if ( ! defined( 'YITH_WCAUTHNET_URL' ) ) {

@@ -331,23 +331,23 @@ if ( ! class_exists( 'YITH_Vendors' ) ) {
 		public function get_vendors_taxonomy_label( $arg = '' ) {
 
 			$label = apply_filters( 'yith_product_vendors_taxonomy_label', array(
-					'name'                       => __( 'Vendor', 'yith_wc_product_vendors' ),
-					'singular_name'              => __( 'Vendor', 'yith_wc_product_vendors' ),
-					'menu_name'                  => __( 'Vendors', 'yith_wc_product_vendors' ),
-					'search_items'               => __( 'Search Vendors', 'yith_wc_product_vendors' ),
-					'all_items'                  => __( 'All Vendors', 'yith_wc_product_vendors' ),
-					'parent_item'                => __( 'Parent Vendor', 'yith_wc_product_vendors' ),
-					'parent_item_colon'          => __( 'Parent Vendor:', 'yith_wc_product_vendors' ),
-					'view_item'                  => __( 'View Vendor', 'yith_wc_product_vendors' ),
-					'edit_item'                  => __( 'Edit Vendor', 'yith_wc_product_vendors' ),
-					'update_item'                => __( 'Update Vendor', 'yith_wc_product_vendors' ),
-					'add_new_item'               => __( 'Add New Vendor', 'yith_wc_product_vendors' ),
-					'new_item_name'              => __( 'New Vendor\'s Name', 'yith_wc_product_vendors' ),
+					'name'                       => __( 'Vendor', 'yith-woocommerce-product-vendors' ),
+					'singular_name'              => __( 'Vendor', 'yith-woocommerce-product-vendors' ),
+					'menu_name'                  => __( 'Vendors', 'yith-woocommerce-product-vendors' ),
+					'search_items'               => __( 'Search Vendors', 'yith-woocommerce-product-vendors' ),
+					'all_items'                  => __( 'All Vendors', 'yith-woocommerce-product-vendors' ),
+					'parent_item'                => __( 'Parent Vendor', 'yith-woocommerce-product-vendors' ),
+					'parent_item_colon'          => __( 'Parent Vendor:', 'yith-woocommerce-product-vendors' ),
+					'view_item'                  => __( 'View Vendor', 'yith-woocommerce-product-vendors' ),
+					'edit_item'                  => __( 'Edit Vendor', 'yith-woocommerce-product-vendors' ),
+					'update_item'                => __( 'Update Vendor', 'yith-woocommerce-product-vendors' ),
+					'add_new_item'               => __( 'Add New Vendor', 'yith-woocommerce-product-vendors' ),
+					'new_item_name'              => __( 'New Vendor\'s Name', 'yith-woocommerce-product-vendors' ),
 					'popular_items'              => null, //don't remove!
-					'separate_items_with_commas' => __( 'Separate vendors with commas', 'yith_wc_product_vendors' ),
-					'add_or_remove_items'        => __( 'Add or remove vendors', 'yith_wc_product_vendors' ),
-					'choose_from_most_used'      => __( 'Choose from most used vendors', 'yith_wc_product_vendors' ),
-					'not_found'                  => __( 'No vendors found', 'yith_wc_product_vendors' ),
+					'separate_items_with_commas' => __( 'Separate vendors with commas', 'yith-woocommerce-product-vendors' ),
+					'add_or_remove_items'        => __( 'Add or remove vendors', 'yith-woocommerce-product-vendors' ),
+					'choose_from_most_used'      => __( 'Choose from most used vendors', 'yith-woocommerce-product-vendors' ),
+					'not_found'                  => __( 'No vendors found', 'yith-woocommerce-product-vendors' ),
 				)
 			);
 

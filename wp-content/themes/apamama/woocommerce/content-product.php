@@ -27,7 +27,7 @@ if ( empty( $product ) || ! $product->is_visible() ) {
 	return;
 }
 ?>
-<div <?php post_class('col-sx-12 col-md-4 apamama-product-item'); ?>>
+<div <?php post_class('col-sx-12 col-md-3 apamama-product-item'); ?>>
 	<?php
 	/**
 	 * woocommerce_before_shop_loop_item hook.

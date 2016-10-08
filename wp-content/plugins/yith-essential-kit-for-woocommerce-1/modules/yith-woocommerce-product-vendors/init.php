@@ -4,8 +4,8 @@ Plugin Name: YITH WooCommerce Multi Vendor
 Plugin URI: http://yithemes.com/themes/plugins/yith-woocommerce-product-vendors/
 Description: YITH WooCommerce Multi Vendor is a plugin explicitly developed to switch your website into a platform hosting more than one shop.
 Author: YITHEMES
-Text Domain: yith_wc_product_vendors
-Version: 1.9.11
+Text Domain: yith-woocommerce-product-vendors
+Version: 1.9.13
 Author URI: http://yithemes.com/
 */
 
@@ -31,7 +31,7 @@ if( ! function_exists( 'install_premium_woocommerce_admin_notice' ) ) {
      */
     function install_premium_woocommerce_admin_notice() { ?>
         <div class="error">
-            <p><?php _e( 'YITH WooCommerce Multi Vendor is enabled but not effective. It requires WooCommerce in order to work.', 'yith_wc_product_vendors' ); ?></p>
+            <p><?php _e( 'YITH WooCommerce Multi Vendor is enabled but not effective. It requires WooCommerce in order to work.', 'yith-woocommerce-product-vendors' ); ?></p>
         </div>
         <?php
     }
@@ -46,7 +46,7 @@ if ( ! function_exists( 'WC' ) ) {
 if ( defined( 'YITH_WPV_VERSION' ) ) {
     return;
 } else {
-    define( 'YITH_WPV_VERSION', '1.9.11' );
+    define( 'YITH_WPV_VERSION', '1.9.13' );
 }
 
 if ( ! defined( 'YITH_WPV_DB_VERSION' ) ) {
@@ -54,7 +54,7 @@ if ( ! defined( 'YITH_WPV_DB_VERSION' ) ) {
 }
 
 /* Load YWCM text domain */
-load_plugin_textdomain( 'yith_wc_product_vendors', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+load_plugin_textdomain( 'yith-woocommerce-product-vendors', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 if ( ! defined( 'YITH_WPV_FREE_INIT' ) ) {
     define( 'YITH_WPV_FREE_INIT', plugin_basename( __FILE__ ) );

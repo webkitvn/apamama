@@ -16,10 +16,10 @@ $vendor_description = do_shortcode( $vendor_description );
 
 <h2>
     <a href="<?php echo $vendor_url ?>">
-        <?php echo __( $vendor_name, 'yith_wc_product_vendors' ) ?>
+        <?php echo __( $vendor_name, 'yith-woocommerce-product-vendors' ) ?>
     </a>
 </h2>
 
 <div class="vendor-description">
-    <?php echo __( $vendor_description, 'yith_wc_product_vendors' ) ?>
+    <?php echo __( $vendor_description, 'yith-woocommerce-product-vendors' ) ?>
 </div>

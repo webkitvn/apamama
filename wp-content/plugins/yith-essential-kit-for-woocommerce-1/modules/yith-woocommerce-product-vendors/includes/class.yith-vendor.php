@@ -22,6 +22,8 @@ if ( ! class_exists ( 'YITH_Vendor' ) ) {
      * @author     Your Inspiration Themes
      *
      * @property    string     $telephone
+     * @property    string     $location
+     * @property    string     $store_email
      * @property    string     $paypal_email
      * @property    string     $enable_selling
      * @property    string     $payment_type
@@ -38,6 +40,7 @@ if ( ! class_exists ( 'YITH_Vendor' ) ) {
      * @property    int|string $commission
      * @property    string     $vat
      * @property    string     $featured_products
+     * @property    string     $bank_account
      *
      */
     class YITH_Vendor {
@@ -485,7 +488,7 @@ if ( ! class_exists ( 'YITH_Vendor' ) ) {
          *
          * @return array
          */
-        public function get_products ( $extra = array () ) {
+        public function get_products ( $extra = array () ) {            
             $args = wp_parse_args ( $extra, array (
                     'posts_per_page' => - 1,
                     'fields'         => 'ids',
@@ -493,7 +496,8 @@ if ( ! class_exists ( 'YITH_Vendor' ) ) {
             );
 
             $args = $this->get_query_products_args ( $args );
-
+            $args = apply_filters( 'yith_wcmv_vendor_get_products_query_args', $args, $extra, $this );
+            
             return get_posts ( $args );
         }
 

@@ -1,7 +1,7 @@
 <?php
 	if ( function_exists( 'add_theme_support' ) ) { 
 		add_theme_support( 'post-thumbnails', array('page', 'post'));
-		set_post_thumbnail_size(380, 240, true ); // default Post Thumbnail dimensions (cropped)
+		set_post_thumbnail_size(740, 300, true ); // default Post Thumbnail dimensions (cropped)
 
 	}
 	if ( function_exists( 'add_image_size' ) ) { 
@@ -120,3 +120,42 @@
 	  );
 	}
 	add_action( 'init', 'register_my_menus' );
+
+
+
+	////CUSTOM POST TYPE FOR CUSTOM BLOCK /////
+	add_action('init', 'block_register', 1);
+		function block_register() {
+	 
+		$labels = array(
+			'name' => _x('Custom block', 'Custom block'),
+			'singular_name' => _x('Custom block', 'post type singular name'),
+			'add_new' => _x('New block', 'New block'),
+			'add_new_item' => __('Add new block'),
+			'edit_item' => __('Edit'),
+			'new_item' => __('Add new block'),
+			'view_item' => __('View block'),
+			'search_items' => __('Search block'),
+			'not_found' =>  __('Nothing found'),
+			'not_found_in_trash' => __('Nothing found in Trash'),
+			'parent_item_colon' => ''
+		);
+	 
+		$args = array(
+			'labels' => $labels,
+			'public' => false,
+			'has_archive' => false,
+			'publicly_queryable' => true,
+			'show_ui' => true,
+			'menu_position'=> 5,
+			//'show_in_menu' => TRUE,
+			//'show_in_nav_menus' => true,
+			'query_var' => true,
+			'menu_icon' => 'dashicons-text',
+			'capability_type' => 'post',
+			'hierarchical' => true,
+			//'supports' => array('title','editor','thumbnail')
+		  ); 
+	 
+		register_post_type( 'block' , $args );
+	}

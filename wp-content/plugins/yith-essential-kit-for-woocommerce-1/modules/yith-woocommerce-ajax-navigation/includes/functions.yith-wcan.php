@@ -46,7 +46,7 @@ function yith_wcan_dropdown_attributes( $selected, $echo = true ) {
 function yith_wcan_attributes_table( $type, $attribute, $id, $name, $values = array(), $echo = true ) {
     $return = '';
 
-    $terms = get_terms( 'pa_' . $attribute, array( 'hide_empty' => '0' ) );
+    $terms = get_terms( array( 'taxonomy' => 'pa_' . $attribute, 'hide_empty' => '0' ) );
 
     if ( 'list' == $type ) {
         $return = '<input type="hidden" name="' . $name . '[colors]" value="" /><input type="hidden" name="' . $name . '[labels]" value="" />';
@@ -252,11 +252,11 @@ if ( ! function_exists( 'yit_get_terms' ) ) {
         switch ( $case ) {
 
             case 'all':
-                $terms = get_terms( $taxonomy, array( 'hide_empty' => true, 'exclude' => $exclude ) );
+                $terms = yith_wcan_wp_get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true, 'exclude' => $exclude ) );
                 break;
 
             case 'hierarchical':
-                $terms = get_terms( $taxonomy, array( 'hide_empty' => true, 'exclude' => $exclude ) );
+                $terms = yith_wcan_wp_get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true, 'exclude' => $exclude ) );
                 if( ! in_array( $instance['type'], apply_filters( 'yith_wcan_display_type_list', array( 'list' ) ) ) ) {
                     $terms = yit_reorder_terms_by_parent( $terms, $taxonomy );
                     $reordered = true;
@@ -264,16 +264,16 @@ if ( ! function_exists( 'yit_get_terms' ) ) {
                 break;
 
             case 'parent' :
-                $terms = get_terms( $taxonomy, array( 'hide_empty' => true, 'parent' => false, 'exclude' => $exclude ) );
+                $terms = yith_wcan_wp_get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true, 'parent' => false, 'exclude' => $exclude ) );
                 break;
 
             default:
-                $args = array( 'hide_empty' => true, 'exclude' => $exclude, 'include' => $include );
+                $args = array( 'taxonomy' => $taxonomy, 'hide_empty' => true, 'exclude' => $exclude, 'include' => $include );
                 if ( 'parent' == $instance['display'] ) {
                     $args['parent'] = false;
                 }
 
-                $terms = get_terms( $taxonomy, $args );
+                $terms = yith_wcan_wp_get_terms( $args );
 
                 if ( 'hierarchical' == $instance['display'] ) {
                     if( ! in_array( $instance['type'], apply_filters( 'yith_wcan_display_type_list', array( 'list' ) ) ) ) {
@@ -336,12 +336,12 @@ if ( ! function_exists( 'yit_term_has_child' ) ) {
      */
     function yit_term_has_child( $term, $taxonomy ) {
         $count       = 0;
-        $child_terms = get_terms( $taxonomy, array( 'child_of' => $term->term_id ) );
+        $child_terms = yith_wcan_wp_get_terms( array( 'taxonomy' => $taxonomy, 'child_of' => $term->term_id ) );
 
         if( ! is_wp_error( $child_terms ) ){
             foreach ( $child_terms as $child_term ) {
                 $_products_in_term = get_objects_in_term( $child_term->term_id, $taxonomy );
-                $count += sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->filtered_product_ids ) );
+                $count += sizeof( array_intersect( $_products_in_term, YITH_WCAN()->frontend->layered_nav_product_ids ) );
             }
         }
 
@@ -488,16 +488,17 @@ if ( ! function_exists( 'yit_get_woocommerce_layered_nav_link' ) ) {
         }
 
         else {
-            $taxonomy           = get_query_var( 'taxonomy' );
+            $queried_object     = get_queried_object();
+            $taxonomy           = $queried_object instanceof WP_Term ? $queried_object->taxonomy : get_query_var( 'taxonomy' );
+            $term               = $queried_object instanceof WP_Term ? $queried_object : get_query_var( 'term' );
             $brands_taxonomy    = yit_get_brands_taxonomy();
 
             if( ! empty( $brands_taxonomy ) && $brands_taxonomy == $taxonomy ){
-                $return = add_query_arg( array( $taxonomy => get_query_var( 'term' ) ), get_post_type_archive_link( 'product' ) );
+                $return = add_query_arg( array( $taxonomy => $term ), get_post_type_archive_link( 'product' ) );
             }
 
             else {
-                $term = get_query_var( 'term' );
-                $return = get_term_link( yith_wcan_is_product_attribute() && is_numeric( $term ) ? intval( $term ) : $term, $taxonomy ); 
+                $return = get_term_link( yith_wcan_is_product_attribute() && is_numeric( $term ) ? intval( $term ) : $term, $taxonomy );
             }
             
             return apply_filters( 'yith_wcan_untrailingslashit', true ) && is_string( $return ) ? untrailingslashit( $return ) : $return;
@@ -599,12 +600,12 @@ if( ! function_exists( 'yit_reorder_hierachical_categories' ) ) {
      * @author   Andrea Grillo <andrea.grillo@yithemes.com>
      */
     function yit_reorder_hierachical_categories( $parent_term_id, $taxonomy = 'product_cat' ) {
-        $childs = get_terms(
-            $taxonomy,
+        $childs = yith_wcan_wp_get_terms(
             array(
-                'parent'       => $parent_term_id,
-                'hierarchical' => true,
-                'hide_empty'   => false
+                'taxonomy'      => $taxonomy,
+                'parent'        => $parent_term_id,
+                'hierarchical'  => true,
+                'hide_empty'    => false
             )
         );
 
@@ -699,5 +700,26 @@ if( !function_exists( 'yith_wcan_is_product_attribute' ) ) {
      */
     function yith_wcan_is_product_attribute( $attribute = '' ) {
         return preg_match( '/pa_' . $attribute . '.*/', get_query_var( 'taxonomy' ) );
+    }
+}
+
+if( ! function_exists( 'yith_wcan_wp_get_terms' ) ) {
+    /**
+     * get_terms function support for old WordPress Version
+     *
+     * @param string $args 
+     * 
+     * @return bool
+     */
+    function yith_wcan_wp_get_terms( $args ) {
+        global $wp_version;
+        
+        if( version_compare( $wp_version, '4.6', '<' ) ){
+            return get_terms( $args['taxonomy'], $args );
+        }
+        
+        else {
+            return get_terms( $args );
+        }
     }
 }

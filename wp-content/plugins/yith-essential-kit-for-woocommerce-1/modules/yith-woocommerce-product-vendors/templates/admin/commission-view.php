@@ -22,8 +22,8 @@ $item_id = $commission->line_item_id;
 
 <div class="wrap">
 	<h2>
-		<?php _e( 'View Commission', 'yith_wc_product_vendors' ) ?>
-		<a href="<?php echo esc_url( remove_query_arg( 'view' ) ) ?>" class="add-new-h2"><?php _e( 'Back', 'yith_wc_product_vendors' ) ?></a>
+		<?php _e( 'View Commission', 'yith-woocommerce-product-vendors' ) ?>
+		<a href="<?php echo esc_url( remove_query_arg( 'view' ) ) ?>" class="add-new-h2"><?php _e( 'Back', 'yith-woocommerce-product-vendors' ) ?></a>
 	</h2>
 
 	<?php YITH_Commissions()->admin_notice(); ?>
@@ -36,21 +36,21 @@ $item_id = $commission->line_item_id;
 
 					<?php if ( $vendor->is_super_user() ) : ?>
 					<form id="woocommerce-order-actions" class="postbox" method="GET">
-						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Commission Actions', 'yith_wc_product_vendors' ) ?></span></h3>
+						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Commission Actions', 'yith-woocommerce-product-vendors' ) ?></span></h3>
 						<div class="inside">
 							<ul class="order_actions submitbox">
 
 								<li class="wide" id="actions">
 									<select name="new_status">
-										<option value=""><?php _e( 'Actions', 'yith_wc_product_vendors' ) ?></option>
+										<option value=""><?php _e( 'Actions', 'yith-woocommerce-product-vendors' ) ?></option>
 										<?php foreach ( YITH_Commissions()->get_status() as $status => $display ) : if ( ! YITH_Commissions()->is_status_changing_permitted( $status, $commission->status ) ) continue; ?>
-											<option value="<?php echo $status ?>"><?php printf( __( 'Change to %s', 'yith_wc_product_vendors' ), $display ) ?></option>
+											<option value="<?php echo $status ?>"><?php printf( __( 'Change to %s', 'yith-woocommerce-product-vendors' ), $display ) ?></option>
 										<?php endforeach; ?>
 									</select>
 
 									<input type="hidden" name="action" value="yith_commission_table_actions" />
 									<input type="hidden" name="view" value="<?php echo $commission->id ?>" />
-									<button type="submit" class="button wc-reload" title="<?php _e( 'Apply', 'yith_wc_product_vendors' ) ?>"><span><?php _e( 'Apply', 'yith_wc_product_vendors' ) ?></span></button>
+									<button type="submit" class="button wc-reload" title="<?php _e( 'Apply', 'yith-woocommerce-product-vendors' ) ?>"><span><?php _e( 'Apply', 'yith-woocommerce-product-vendors' ) ?></span></button>
 								</li>
 
 							</ul>
@@ -59,7 +59,7 @@ $item_id = $commission->line_item_id;
 					<?php endif; ?>
 
 					<div id="woocommerce-order-notes" class="postbox">
-						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Commission notes', 'yith_wc_product_vendors' ) ?></span></h3>
+						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Commission notes', 'yith-woocommerce-product-vendors' ) ?></span></h3>
 						<div class="inside">
 							<ul class="order_notes">
 
@@ -96,7 +96,7 @@ $item_id = $commission->line_item_id;
 
 							<div class="panel-wrap woocommerce">
 								<div id="order_data" class="yith-commission panel">
-									<h2><?php printf( __( 'Commission %s Details', 'yith_wc_product_vendors' ), '#' . $commission->id ) ?></h2>
+									<h2><?php printf( __( 'Commission %s Details', 'yith-woocommerce-product-vendors' ), '#' . $commission->id ) ?></h2>
 									<p class="order_number">
 										<?php
 										$user_info = $commission->get_user();
@@ -145,29 +145,29 @@ $item_id = $commission->line_item_id;
 
                                         $wc_order_status = wc_get_order_statuses();
 
-										printf( _x( 'credited to %s &#8212; from order %s &#8212; order status: %s', 'Commission credited to [user]', 'yith_wc_product_vendors' ), $username, $order_info, $wc_order_status[ $order->post_status ] );
+										printf( _x( 'credited to %s &#8212; from order %s &#8212; order status: %s', 'Commission credited to [user]', 'yith-woocommerce-product-vendors' ), $username, $order_info, $wc_order_status[ $order->post_status ] );
 										?>
 									</p>
 
 									<div class="order_data_column_container">
 										<div class="order_data_column">
 
-											<h4><?php _e( 'General details', 'yith_wc_product_vendors' ) ?></h4>
+											<h4><?php _e( 'General details', 'yith-woocommerce-product-vendors' ) ?></h4>
 											<div class="address">
 												<p>
-													<strong><?php _e( 'Status', 'yith_wc_product_vendors' ) ?>:</strong>
+													<strong><?php _e( 'Status', 'yith-woocommerce-product-vendors' ) ?>:</strong>
 													<?php echo $commission->get_status('display') ?>
 												</p>
 												<p>
-													<strong><?php _e( 'Commission date', 'yith_wc_product_vendors' ) ?>:</strong>
+													<strong><?php _e( 'Commission date', 'yith-woocommerce-product-vendors' ) ?>:</strong>
 													<?php echo $commission->get_date('display') ?>
 												</p>
 												<p>
-													<strong><?php _e( 'Last update', 'yith_wc_product_vendors' ) ?>:</strong>
+													<strong><?php _e( 'Last update', 'yith-woocommerce-product-vendors' ) ?>:</strong>
 													<?php
 													$date = ! empty( $commission->last_edit ) && strpos( $commission->last_edit, '0000-00-00' ) ? $commission->last_edit : $commission->get_date();
-													$t_time = date_i18n( __( 'Y/m/d g:i:s A', 'yith_wc_product_vendors' ), mysql2date( 'U', $date ) );
-													$h_time = sprintf( __( '%s ago', 'yith_wc_product_vendors' ), human_time_diff( mysql2date( 'U', $date ) ) );
+													$t_time = date_i18n( __( 'Y/m/d g:i:s A', 'yith-woocommerce-product-vendors' ), mysql2date( 'U', $date ) );
+													$h_time = sprintf( __( '%s ago', 'yith-woocommerce-product-vendors' ), human_time_diff( mysql2date( 'U', $date ) ) );
 
 													echo '<abbr title="' . $t_time . '">' . $h_time . '</abbr>';
 													?>
@@ -177,31 +177,31 @@ $item_id = $commission->line_item_id;
 										</div>
 										<div class="order_data_column">
 
-											<h4><?php _e( 'User details', 'yith_wc_product_vendors' ) ?></h4>
+											<h4><?php _e( 'User details', 'yith-woocommerce-product-vendors' ) ?></h4>
 											<div class="address">
 												<p>
                                                     <?php
                                                     if( ! empty( $user ) ) {
-                                                        printf( '<strong>%1$s:</strong>',  __( 'Email', 'yith_wc_product_vendors' ) );
+                                                        printf( '<strong>%1$s:</strong>',  __( 'Email', 'yith-woocommerce-product-vendors' ) );
                                                         printf( '<a href="mailto:%1$s">%1$s</a>', $user->user_email );
                                                     } else {
-                                                        echo '<em>' . __( 'User deleted', 'yith_wc_product_vendors' ) . '</em>';
+                                                        echo '<em>' . __( 'User deleted', 'yith-woocommerce-product-vendors' ) . '</em>';
                                                     }
                                                     ?>
 												</p>
 												<p>
-													<strong><?php _e( 'Vendor', 'yith_wc_product_vendors' ) ?>:</strong>
+													<strong><?php _e( 'Vendor', 'yith-woocommerce-product-vendors' ) ?>:</strong>
 													<?php
                                                     if( $vendor->is_valid() ) {
                                                         $vendor_url  = get_edit_term_link( $vendor->id, $vendor->taxonomy );
 													    echo ! empty( $vendor_url ) ? "<a href='{$vendor_url}' target='_blank'>{$vendor->name}</a>" : $vendor->name;
                                                     } else {
-                                                        echo '<em>' . __( 'Vendor deleted', 'yith_wc_product_vendors' ) . '</em>';
+                                                        echo '<em>' . __( 'Vendor deleted', 'yith-woocommerce-product-vendors' ) . '</em>';
                                                     }
 													?>
 												</p>
 												<p>
-													<strong><?php _e( 'PayPal', 'yith_wc_product_vendors' ) ?>:</strong>
+													<strong><?php _e( 'PayPal', 'yith-woocommerce-product-vendors' ) ?>:</strong>
 													<a href="mailto:<?php echo $vendor->paypal_email ?>"><?php echo $vendor->paypal_email ?></a>
 												</p>
 											</div>
@@ -209,7 +209,7 @@ $item_id = $commission->line_item_id;
 										</div>
                                         <?php if( ! empty( $user ) ) : ?>
                                             <div class="order_data_column">
-                                                <h4><?php _e( 'Billing information', 'yith_wc_product_vendors' ) ?></h4>
+                                                <h4><?php _e( 'Billing information', 'yith-woocommerce-product-vendors' ) ?></h4>
                                                 <div class="address">
                                                     <p>
                                                         <?php
@@ -234,7 +234,7 @@ $item_id = $commission->line_item_id;
                                             </div>
 
                                             <div class="order_data_column">
-                                                <h4><?php _e( 'Shipping information', 'yith_wc_product_vendors' ) ?></h4>
+                                                <h4><?php _e( 'Shipping information', 'yith-woocommerce-product-vendors' ) ?></h4>
                                                 <div class="address">
                                                     <p>
                                                         <?php
@@ -269,7 +269,7 @@ $item_id = $commission->line_item_id;
 					</div>
 
 					<div id="woocommerce-order-items" class="postbox">
-						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Item data', 'yith_wc_product_vendors' ) ?></span></h3>
+						<h3 class="hndle ui-sortable-handle"><span><?php _e( 'Item data', 'yith-woocommerce-product-vendors' ) ?></span></h3>
 						<div class="inside">
 
 							<div class="woocommerce_order_items_wrapper wc-order-items-editable">
@@ -459,13 +459,13 @@ $item_id = $commission->line_item_id;
 									<tbody>
 
 										<tr>
-											<td class="label"><?php _e( 'Rate', 'yith_wc_product_vendors' ) ?>:</td>
+											<td class="label"><?php _e( 'Rate', 'yith-woocommerce-product-vendors' ) ?>:</td>
 											<td class="total"><?php echo $commission->get_rate( 'display' ) ?></td>
 											<td width="1%"></td>
 										</tr>
 
 										<tr>
-											<td class="label"><?php _e( 'Commission', 'yith_wc_product_vendors' ) ?>:</td>
+											<td class="label"><?php _e( 'Commission', 'yith-woocommerce-product-vendors' ) ?>:</td>
 											<td class="total">
 												<?php echo str_replace( array( '<span class="amount">', '</span>' ), '', wc_price( $commission->get_amount() + abs( $commission->get_refund_amount() ) ) ) ?>
 											</td>

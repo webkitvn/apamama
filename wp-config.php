@@ -23,10 +23,10 @@
 define('DB_NAME', 'apamama');
 
 /** MySQL database username */
-define('DB_USER', 'apamama');
+define('DB_USER', 'root');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'n3WPi@8@S7');
+define('DB_PASSWORD', 'mysql');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');

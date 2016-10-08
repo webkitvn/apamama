@@ -50,6 +50,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             add_filter ( 'woocommerce_email_enabled_customer_completed_order', array ( $this, 'woocommerce_email_enabled_new_order' ), 10, 2 );
             add_filter ( 'woocommerce_email_enabled_customer_partially_refunded_order', array ( $this, 'woocommerce_email_enabled_new_order' ), 10, 2 );
             add_filter ( 'woocommerce_email_enabled_customer_refunded_order', array ( $this, 'woocommerce_email_enabled_new_order' ), 10, 2 );
+            add_filter ( 'woocommerce_email_enabled_customer_on_hold_order', array ( $this, 'woocommerce_email_enabled_new_order' ), 10, 2 );
 
             /* Order Refund */
             add_action ( 'woocommerce_order_refunded', array ( $this, 'order_refunded' ), 10, 2 );
@@ -60,7 +61,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             add_filter ( 'woocommerce_attribute_label', array ( $this, 'commissions_attribute_label' ), 10, 3 );
 
             /* Order Item Meta */
-            add_action ( 'woocommerce_hidden_order_itemmeta', array ( $this, 'hidden_order_itemmeta' ) );
+            add_filter ( 'woocommerce_hidden_order_itemmeta', array ( $this, 'hidden_order_itemmeta' ) );
 
             /* Order Table */
             add_filter ( 'manage_shop_order_posts_columns', array ( $this, 'shop_order_columns' ) );
@@ -80,6 +81,9 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             
             /* YITH WooCommerce Stripe Support */
             add_filter( 'yith_stripe_skip_capture_charge', array( $this, 'skip_stripe_charge_for_suborders' ), 10, 2 );
+            
+            /* Add shipping addresses to vendor email */
+            add_filter( 'woocommerce_order_needs_shipping_address', array( $this, 'order_needs_shipping_address' ), 10, 3 );
 
             $sync_enabled = get_option ( 'yith_wpv_vendors_option_order_synchronization', 'yes' );
 
@@ -119,6 +123,12 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                     $nopriv && add_action ( "wp_ajax_nopriv_woocommerce_{$ajax_event}", array ( __CLASS__, $ajax_event, 5 ) );
                 }
             }
+
+            //the revoke download permission and the grant download permission would be always synchronized
+            add_action( 'woocommerce_ajax_revoke_access_to_product_download', array( $this, 'revoke_access_to_product_download' ), 10, 3 );
+            add_action( 'wp_ajax_woocommerce_grant_access_to_download', array( $this, 'grant_access_to_download' ), 5 );
+
+
         }
 
         /**
@@ -409,7 +419,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                 foreach ( $suborder_ids as $suborder_id ) {
                     /** @var $suborder WC_Order */
                     $suborder = wc_get_order ( $suborder_id );
-                    $suborder->update_status ( $new_status, _x ( 'Update by admin: ', 'Order note', 'yith_wc_product_vendors' ) );
+                    $suborder->update_status ( $new_status, _x ( 'Update by admin: ', 'Order note', 'yith-woocommerce-product-vendors' ) );
                 }
                 add_action ( 'woocommerce_order_status_completed', 'wc_paying_customer' );
 
@@ -740,7 +750,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                     if ( ! empty( $suborder_ids ) ) {
                         foreach ( $suborder_ids as $suborder_id ) {
                             $suborder = wc_get_order ( $suborder_id );
-                            $note_id  = $suborder->add_order_note ( _x ( 'Update by admin: ', 'Order note', 'yith_wc_product_vendors' ) . $note, $is_customer_note, true );
+                            $note_id  = $suborder->add_order_note ( _x ( 'Update by admin: ', 'Order note', 'yith-woocommerce-product-vendors' ) . $note, $is_customer_note, true );
                             add_comment_meta ( $note_id, 'parent_note_id', $parent_note_id );
                         }
                     }
@@ -1284,7 +1294,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
         }
 
         /**
-         * Check for new order email
+         * Prevent duplicated email for customer
          */
         public function woocommerce_email_enabled_new_order ( $enabled, $object ) {
             $is_editpost_action = ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'editpost', 'edit') );
@@ -1473,8 +1483,8 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                             "<a href='%s' class='%s'>%s</a> <small>(%s: <strong>%s</strong>)</small>",
                             $admin_url,
                             'commission-id-label',
-                            __ ( 'commission_id', 'yith_wc_product_vendors' ) ,
-                            __ ( 'status', 'yith_wc_product_vendors' ) ,
+                            __ ( 'commission_id', 'yith-woocommerce-product-vendors' ) ,
+                            __ ( 'status', 'yith-woocommerce-product-vendors' ) ,
                             strtolower( $commission->get_status( 'display' ) )
                         );
                         $attribute_label = $item_meta_key == $meta_key ? $url_attribute_label : $attribute_label;
@@ -1537,11 +1547,11 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             $vendor = yith_get_vendor ( 'current', 'user' );
             if ( $vendor->is_super_user () ) {
                 if ( ( ! isset( $_GET[ 'post_status' ] ) || ( isset( $_GET[ 'post_status' ] ) && 'trash' != $_GET[ 'post_status' ] ) ) ) {
-                    $suborder      = array ( 'suborder' => _x ( 'Suborders', 'Admin: Order table column', 'yith_wc_product_vendors' ) );
+                    $suborder      = array ( 'suborder' => _x ( 'Suborders', 'Admin: Order table column', 'yith-woocommerce-product-vendors' ) );
                     $ref_pos       = array_search ( 'order_title', array_keys ( $order_columns ) );
                     $order_columns = array_slice ( $order_columns, 0, $ref_pos + 1, true ) + $suborder + array_slice ( $order_columns, $ref_pos + 1, count ( $order_columns ) - 1, true );
                 } else {
-                    $vendor        = array ( 'vendor' => _x ( 'Vendor', 'Admin: Order table column', 'yith_wc_product_vendors' ) );
+                    $vendor        = array ( 'vendor' => _x ( 'Vendor', 'Admin: Order table column', 'yith-woocommerce-product-vendors' ) );
                     $ref_pos       = array_search ( 'order_title', array_keys ( $order_columns ) );
                     $order_columns = array_slice ( $order_columns, 0, $ref_pos + 1, true ) + $vendor + array_slice ( $order_columns, $ref_pos + 1, count ( $order_columns ) - 1, true );
                 }
@@ -1580,7 +1590,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                                 wc_get_order_status_name ( $suborder->get_status () ),
                                 $order_uri,
                                 $suborder_id,
-                                _x ( 'in', 'Order table details', 'yith_wc_product_vendors' ),
+                                _x ( 'in', 'Order table details', 'yith-woocommerce-product-vendors' ),
                                 $vendor->name
                             );
 
@@ -1621,10 +1631,10 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
 
             if ( $vendor->is_super_user () ) {
                 if ( $has_suborder ) {
-                    $metabox_suborder_description = _x ( 'Suborders', 'Admin: Single order page. Suborder details box', 'yith_wc_product_vendors' ) . ' <span class="tips" data-tip="' . esc_attr__ ( 'Note: from this box you can monitor the status of suborders associated to individual vendors.', 'woocommerce' ) . '">[?]</span>';
+                    $metabox_suborder_description = _x ( 'Suborders', 'Admin: Single order page. Suborder details box', 'yith-woocommerce-product-vendors' ) . ' <span class="tips" data-tip="' . esc_attr__ ( 'Note: from this box you can monitor the status of suborders associated to individual vendors.', 'woocommerce' ) . '">[?]</span>';
                     add_meta_box ( 'woocommerce-suborders', $metabox_suborder_description, array ( $this, 'output' ), 'shop_order', 'side', 'core', array ( 'metabox' => 'suborders' ) );
                 } else if ( $is_suborder ) {
-                    $metabox_parent_order_description = _x ( 'Parent order', 'Admin: Single order page. Parent order details box', 'yith_wc_product_vendors' );
+                    $metabox_parent_order_description = _x ( 'Parent order', 'Admin: Single order page. Parent order details box', 'yith-woocommerce-product-vendors' );
                     add_meta_box ( 'woocommerce-parent-order', $metabox_parent_order_description, array ( $this, 'output' ), 'shop_order', 'side', 'high', array ( 'metabox' => 'parent-order' ) );
                 }
             }
@@ -1655,7 +1665,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                             wc_get_order_status_name ( $suborder->get_status () ),
                             $suborder_uri,
                             $suborder_id,
-                            _x ( 'in', 'Order table details', 'yith_wc_product_vendors' ),
+                            _x ( 'in', 'Order table details', 'yith-woocommerce-product-vendors' ),
                             $vendor->name
                         );
                         echo '<li>';
@@ -1667,7 +1677,7 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
                 case 'parent-order':
                     $parent_order_id  = wp_get_post_parent_id ( absint ( $post->ID ) );
                     $parent_order_uri = esc_url ( 'post.php?post=' . absint ( $parent_order_id ) . '&action=edit' );
-                    printf ( '<a href="%s">&#8592; %s</a>', $parent_order_uri, _x ( 'Return to main order', 'Admin: single order page. Link to parent order', 'yith_wc_product_vendors' ) );
+                    printf ( '<a href="%s">&#8592; %s</a>', $parent_order_uri, _x ( 'Return to main order', 'Admin: single order page. Link to parent order', 'yith-woocommerce-product-vendors' ) );
                     break;
             }
         }
@@ -1881,5 +1891,154 @@ if ( ! class_exists ( 'YITH_Orders' ) ) {
             return $skip;
         }
 
+        public function revoke_access_to_product_download( $download_id, $product_id, $order_id  ){
+
+            check_ajax_referer( 'revoke-access', 'security' );
+
+
+            if ( ! current_user_can( 'edit_shop_orders' ) ) {
+                die(-1);
+            }
+
+            $parent_order_id = 0;
+            $current_order_id = 0;
+            if ( wp_get_post_parent_id ( $order_id ) ) {
+                $order  = wc_get_order( $order_id );
+                $parent_order_id = $order->post->post_parent;
+            }
+
+            global $wpdb;
+
+            if( $parent_order_id  == 0 ) {
+                $suborders = self::get_suborder( $order_id );
+                $vendor = yith_get_vendor( $product_id, 'product' );
+                $vendor_orders = $vendor->get_orders();
+                $suborder_id = array_intersect( $vendor_orders, $suborders );
+
+                if( count( $suborder_id ) == 1 ) {
+
+                    $current_order_id = implode('', $suborder_id );
+                }
+
+            }else{
+                $current_order_id = $parent_order_id;
+            }
+
+               $query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE order_id = %d AND product_id = %d AND download_id = %s;", $current_order_id, $product_id, $download_id );
+               $wpdb->query( $query );
+
+            die();
+        }
+
+        public static  function grant_access_to_download() {
+
+           
+            check_ajax_referer( 'grant-access', 'security' );
+
+            if ( ! current_user_can( 'edit_shop_orders' ) ) {
+                die(-1);
+            }
+
+
+            global $wpdb;
+
+            $wpdb->hide_errors();
+
+            $order_id     = intval( $_POST['order_id'] );
+            $product_ids  = $_POST['product_ids'];
+            $loop         = intval( $_POST['loop'] );
+            $file_counter = 0;
+
+
+            $parent_order_id = 0;
+            if( wp_get_post_parent_id( $order_id) ){
+                $order  = wc_get_order( $order_id );
+                $parent_order_id = $order->post->post_parent;
+            }
+
+            $suborders = self::get_suborder( $order_id );
+
+
+            if ( ! is_array( $product_ids ) ) {
+                $product_ids = array( $product_ids );
+            }
+
+            foreach ( $product_ids as $product_id ) {
+
+                $product = wc_get_product( $product_id );
+                $files   = $product->get_files();
+
+                if( $parent_order_id == 0 ) {
+                    $vendor = yith_get_vendor( $product_id, 'product' );
+                    $vendor_orders = $vendor->get_orders();
+                    $suborder_id = array_intersect( $vendor_orders, $suborders );
+
+
+                    if( count( $suborder_id ) == 1 ) {
+                        $suborder_id = implode( '', $suborder_id );
+                        $order = wc_get_order( $suborder_id );
+                    }
+                }else{
+                    $order = wc_get_order( $parent_order_id );
+                }
+
+
+                if ( ! $order->billing_email ) {
+                    die();
+                }
+
+
+                if ( ! empty( $files ) ) {
+                    foreach ( $files as $download_id => $file ) {
+                        if ( $inserted_id = wc_downloadable_file_permission( $download_id, $product_id, $order ) ) {
+
+                            // insert complete - get inserted data
+                            $download = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}woocommerce_downloadable_product_permissions WHERE permission_id = %d", $inserted_id ) );
+
+                            $loop ++;
+                            $file_counter ++;
+
+                            if ( isset( $file['name'] ) ) {
+                                $file_count = $file['name'];
+                            } else {
+                                $file_count = sprintf( __( 'File %d', 'woocommerce' ), $file_counter );
+                            }
+                         //   include( WC()->plugin_path().'/includes/admin/meta-boxes/views/html-order-download-permission.php' );
+                        }
+                    }
+                }
+            }
+        }
+
+        /**
+         * Checks if an order needs display the shipping address, based on shipping method.
+         *
+         * @author Andrea Grillo <andrea.grillo@yithemes.com>
+         * @return boolean
+         */
+        public function order_needs_shipping_address( $needs_address, $hide, $order ){
+            $raq_order_meta = get_post_meta( $order->id, 'ywraq_raq' );
+            $is_quote = ! empty( $raq_order_meta );
+
+            if( $order->post->post_parent && ! $is_quote ){
+                $parent_order = wc_get_order( $order->post->post_parent );
+
+                if ( ! wc_shipping_enabled() ) {
+                    return false;
+                }
+
+                $hide  = apply_filters( 'woocommerce_order_hide_shipping_address', array( 'local_pickup' ), $this );
+                $needs_address = false;
+
+                foreach ( $parent_order->get_shipping_methods() as $shipping_method ) {
+                    if ( ! in_array( $shipping_method['method_id'], $hide ) ) {
+                        $needs_address = true;
+                        break;
+                    }
+                }    
+            }
+
+            return $needs_address; 
+        }
     }
 }

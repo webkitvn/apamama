@@ -50,7 +50,7 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                 ) 
             );
             
-            if( in_array( strtolower( wp_get_theme()->name ), $theme_support ) ){
+            if( in_array( strtolower( wp_get_theme()->name ), $theme_support ) || class_exists( 'QTX_Translator' ) ){
                 add_filter( 'yith_wcan_use_wp_the_query_object', '__return_true' );
             }
 
@@ -58,9 +58,6 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
             $is_ajax_navigation_active = is_active_widget( false, false, 'yith-woo-ajax-navigation', true );
 
             //Actions
-            //TODO: Remove woocommerce_layered_nav_init method
-            //add_action( 'init', array( $this, 'woocommerce_layered_nav_init' ), 90 );
-
             if( $is_ajax_navigation_active ) {
                 add_filter( 'woocommerce_is_layered_nav_active', '__return_true' );
             }
@@ -108,7 +105,6 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
          * @return array
          */
         public function the_posts( $posts, $query = false ) {
-
             if( YITH_WCAN()->is_wc_older_2_6 ){
                 add_action( 'wp', array( $this, 'layered_navigation_array_for_wc_older_26' ) );
             }
@@ -147,7 +143,7 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                     $current_wp_query,
                     array(
                         'post_type'              => 'product',
-                        'numberposts'            => -1,
+                        'numberposts'            => - 1,
                         'post_status'            => 'publish',
                         'meta_query'             => is_object( $current_wp_query ) ? $current_wp_query->meta_query : array(),
                         'fields'                 => 'ids',
@@ -155,9 +151,21 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                         'update_post_meta_cache' => false,
                         'update_post_term_cache' => false,
                         'pagename'               => '',
-                        'wc_query'               => 'get_products_in_view'
+                        'wc_query'               => 'get_products_in_view',
+                        'suppress_filters'       => true
                     )
                 );
+
+                $hide_out_of_stock_items = apply_filters( 'yith_wcan_hide_out_of_stock_items', 'yes' == get_option( 'woocommerce_hide_out_of_stock_items' ) ? true : false );
+
+                if( $hide_out_of_stock_items ){
+                    $unfiltered_args['meta_query'][] = array(
+                        'key' => '_stock_status',
+                        'value' => 'instock',
+                        'compare' => 'AND'
+                    );
+                }
+
                 $this->unfiltered_product_ids = get_posts( $unfiltered_args );
                 $this->filtered_product_ids   = $queried_post_ids;
 
@@ -174,7 +182,6 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                     $this->layered_nav_product_ids = $this->unfiltered_product_ids;
                 }
             }
-            
             return $posts;
         }
 
@@ -219,68 +226,7 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                 wp_localize_script( 'yith-wcan-script', 'yith_wcan', apply_filters( 'yith-wcan-frontend-args', $args ) );
             }
         }
-
-
-        /**
-         * Layered Nav Init
-         *
-         * @package    WooCommerce/Widgets
-         * @access     public
-         * @return void
-         */
-        public function woocommerce_layered_nav_init() {
-            $is_ajax_navigation_active = is_active_widget( false, false, 'yith-woo-ajax-navigation', true );
-
-            
-
-            if ( ! YITH_WCAN()->is_wc_older_2_6 && $is_ajax_navigation_active && ! is_admin() ) {
-
-                $_chosen_attributes = YITH_WCAN()->get_layered_nav_chosen_attributes();
-
-                /* FIX TO WOOCOMMERCE 2.1 */
-                $attibute_taxonomies = function_exists( 'wc_get_attribute_taxonomies' ) ? $attribute_taxonomies = wc_get_attribute_taxonomies() :  $attribute_taxonomies = WC()->get_attribute_taxonomies();
-
-                if ( $attribute_taxonomies ) {
-                    foreach ( $attribute_taxonomies as $tax ) {
-
-                        $attribute = wc_sanitize_taxonomy_name( $tax->attribute_name );
-
-                        /* FIX TO WOOCOMMERCE 2.1 */
-                        if ( function_exists( 'wc_attribute_taxonomy_name' ) ) {
-                            $taxonomy = wc_attribute_taxonomy_name( $attribute );
-                        }
-                        else {
-                            $taxonomy = WC()->attribute_taxonomy_name( $attribute );
-                        }
-
-                        $name            = 'filter_' . $attribute;
-                        $query_type_name = 'query_type_' . $attribute;
-
-                        if ( ! empty( $_GET[$name] ) && taxonomy_exists( $taxonomy ) ) {
-
-                            $_chosen_attributes[ $taxonomy ]['terms'] = explode( ',', $_GET[ $name ] );
-
-                            if ( empty( $_GET[ $query_type_name ] ) || ! in_array( strtolower( $_GET[ $query_type_name ] ), array( 'and', 'or' ) ) )
-                                $_chosen_attributes[ $taxonomy ]['query_type'] = apply_filters( 'woocommerce_layered_nav_default_query_type', 'and' );
-                            else
-                                $_chosen_attributes[ $taxonomy ]['query_type'] = strtolower( $_GET[ $query_type_name ] );
-
-                        }
-                    }
-                }
-
-                if ( YITH_WCAN()->is_wc_older_2_1 ) {
-                    add_filter( 'woocommerce_is_layered_nav_active', '__return_true' );
-                    //add_filter( 'loop_shop_post_in', 'woocommerce_layered_nav_query' );
-                }
-
-                elseif ( YITH_WCAN()->is_wc_older_2_6 ) {
-                    add_filter( 'woocommerce_is_layered_nav_active', '__return_true' );
-                    //add_filter( 'loop_shop_post_in', array( WC()->query, 'layered_nav_query' ) );
-                }
-                //Nothing to do for WooCommerce 2.6
-            }
-        }
+        
         /**
          * Layered Nav post filter.
          *
@@ -294,7 +240,7 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
             if( is_product_taxonomy() ){
                 $is_product_taxonomy = array(
                     'taxonomy'  => get_queried_object()->taxonomy,
-                    'terms'     =>  get_queried_object()->slug,
+                    'terms'     => get_queried_object()->slug,
                     'field'     => YITH_WCAN()->filter_term_field
                 );
             }
@@ -321,8 +267,11 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
                                 'post_type' 	=> 'product',
                                 'numberposts' 	=> -1,
                                 'post_status' 	=> 'publish',
+                                'meta_key'      => '_visibility',
+                                'meta_value'    => 'visible',
                                 'fields' 		=> 'ids',
                                 'no_found_rows' => true,
+                                'suppress_filters'       => true,
                                 'tax_query' => array(
                                     array(
                                         'taxonomy' 	=> $attribute,
@@ -388,13 +337,16 @@ if ( ! class_exists( 'YITH_WCAN_Frontend' ) ) {
 
             else {
 
-                 $args = array(
-                    'post_type'     => 'product',
-                    'numberposts'   => -1,
-                    'post_status'   => 'publish',
-                    'fields'        => 'ids',
-                    'no_found_rows' => true,
-                    'tax_query' => array()
+                $args = array(
+                    'post_type'        => 'product',
+                    'numberposts'      => - 1,
+                    'post_status'      => 'publish',
+                    'meta_key'         => '_visibility',
+                    'meta_value'       => 'visible',
+                    'fields'           => 'ids',
+                    'no_found_rows'    => true,
+                    'suppress_filters' => true,
+                    'tax_query'        => array()
                 );
 
 

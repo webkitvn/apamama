@@ -75,9 +75,11 @@ select#tax-input-yith_shop_vendor {
 
 /* Add-ons tab */
 
+#yith_wpv_panel_add-ons #plugin-fw-wc h2,
 #yith_wpv_panel_add-ons #plugin-fw-wc h3,
 #yith_wpv_panel_add-ons #plugin-fw-wc > p {
     display: inline-block;
+    margin-right: 10px;
 }
 
 

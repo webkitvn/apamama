@@ -37,7 +37,7 @@ get_header( 'shop' ); ?>
 			$image = get_field('category_banner', $category->taxonomy.'_'.$category->term_id);
 			if($image) :
 		?>
-		<div class="container cate-banner">
+		<div class="container-fluid cate-banner">
 			<div class="row">
 				<div class="col-xs-12">
 					<img src="<?php echo $image['sizes']['cate_banner'] ?>" alt="<?php echo $category->name ?>">
@@ -47,7 +47,7 @@ get_header( 'shop' ); ?>
 		<?php endif; ?>
 	<?php endif; ?>
 	<?php if(!empty($all_categories) && is_product_category()) : ?>
-	<div class="container product-cats-wrapper">
+	<div class="container-fluid product-cats-wrapper">
 		<div class="row">
 			<div class="col-xs-12">
 				<ul class="product-cats">
@@ -71,9 +71,9 @@ get_header( 'shop' ); ?>
 	</div>
 	<?php endif; ?>
 
-	<div class="container main-content-wrapper">
+	<div class="container-fluid main-content-wrapper">
 		<div class="row">
-			<aside class="col-xs-12 col-md-3">
+			<aside class="col-xs-12 col-md-2">
 			<!-- Side bar -->
 			<?php
 				/**
@@ -85,7 +85,7 @@ get_header( 'shop' ); ?>
 			?>
 			<!--END sidebar -->
 			</aside>
-			<div class="col-xs-12 col-md-9">
+			<div class="col-xs-12 col-md-10">
 		<?php
 			/**
 			 * woocommerce_before_main_content hook.

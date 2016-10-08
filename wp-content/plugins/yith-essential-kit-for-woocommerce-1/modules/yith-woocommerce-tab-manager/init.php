@@ -3,15 +3,15 @@
  * Plugin Name: YITH WooCommerce Tab Manager
  * Plugin URI: http://yithemes.com/themes/plugins/yith-woocommerce-tab-manager/
  * Description: YITH WooCommerce Tab Manager allows you to add Tab to products.
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: YITHEMES
  * Author URI: http://yithemes.com/
- * Text Domain: yith_wc_tab_manager
+ * Text Domain: yith-woocommerce-tab-manager
  * Domain Path: /languages/
  *
  * @author Your Inspiration Themes
  * @package YITH WooCommerce Tab Manager
- * @version 1.1.5
+ * @version 1.1.6
  */
 
 /*  Copyright 2013  Your Inspiration Themes  (email : plugins@yithemes.com)

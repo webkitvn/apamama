@@ -232,7 +232,7 @@ jQuery(document).ready( function($) {
         $(this).on( 'yith-wapo-product-option-conditional', function( e , data ) {
             'use strict';
 
-            var current_group_container = $(data.closest('.ywapo_group_container'));
+            var current_group_container = $(data).closest('.ywapo_group_container');
 
             doConditionaLoop( $(this) , data , current_group_container );
 

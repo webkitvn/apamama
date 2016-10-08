@@ -17,16 +17,16 @@ return apply_filters( 'yith_wpv_panel_vendors_options', array(
             ),
 
             'vendors_options_title' => array(
-                'title' => __( 'Product management', 'yith_wc_product_vendors' ),
+                'title' => __( 'Product management', 'yith-woocommerce-product-vendors' ),
                 'type'  => 'title',
                 'desc'  => '',
                 'id'    => 'yith_wpv_vendors_options_title'
             ),
 
             'vendors_color_name'    => array(
-                'title'   => __( 'Vendor name label color', 'yith_wc_product_vendors' ),
+                'title'   => __( 'Vendor name label color', 'yith-woocommerce-product-vendors' ),
                 'type'    => 'color',
-                'desc'    => __( 'Use in shop page and single product page', 'yith_wc_product_vendors' ),
+                'desc'    => __( 'Use in shop page and single product page', 'yith-woocommerce-product-vendors' ),
                 'id'      => 'yith_vendors_color_name',
                 'default' => '#bc360a'
             ),
@@ -40,24 +40,24 @@ return apply_filters( 'yith_wpv_panel_vendors_options', array(
             ),
 
             'vendors_order_title'           => array(
-                'title' => __( 'Order management', 'yith_wc_product_vendors' ),
+                'title' => __( 'Order management', 'yith-woocommerce-product-vendors' ),
                 'type'  => 'title',
                 'desc'  => '',
                 'id'    => 'yith_wpv_vendors_orders_title'
             ),
 
             'vendors_order_management'      => array(
-                'title'   => __( 'Enable order management', 'yith_wc_product_vendors' ),
+                'title'   => __( 'Enable order management', 'yith-woocommerce-product-vendors' ),
                 'type'    => 'checkbox',
-                'desc'    => __( 'If you enable this option, each vendor will be able to manage orders on his/her own products independently.', 'yith_wc_product_vendors' ),
+                'desc'    => __( 'If you enable this option, each vendor will be able to manage orders on his/her own products independently.', 'yith-woocommerce-product-vendors' ),
                 'id'      => 'yith_wpv_vendors_option_order_management',
                 'default' => 'no'
             ),
 
             'vendors_order_synchronization' => array(
-                'title'   => __( 'Order synchronization', 'yith_wc_product_vendors' ),
+                'title'   => __( 'Order synchronization', 'yith-woocommerce-product-vendors' ),
                 'type'    => 'checkbox',
-                'desc'    => __( "All changes to general orders will be synchronized with the individual vendor's order", 'yith_wc_product_vendors' ),
+                'desc'    => __( "All changes to general orders will be synchronized with the individual vendor's order", 'yith-woocommerce-product-vendors' ),
                 'id'      => 'yith_wpv_vendors_option_order_synchronization',
                 'default' => 'yes'
             ),

@@ -185,10 +185,10 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 	        //Set messages
 	        $this->_messages = apply_filters( 'yith_commissions_admin_notice',
 		        array(
-			        'error'   => __( 'Commission status not updated!', 'yith_wc_product_vendors' ),
-			        'updated' => __( 'Commission status updated!', 'yith_wc_product_vendors' ),
-			        'pay-process' => __( 'Payment successful. In a few minutes you will receive an email with the outcome of the payment and the commission state will be changed accordingly.', 'yith_wc_product_vendors' ),
-			        'pay-failed'  => __( 'Payment failed.', 'yith_wc_product_vendors' )
+			        'error'   => __( 'Commission status not updated!', 'yith-woocommerce-product-vendors' ),
+			        'updated' => __( 'Commission status updated!', 'yith-woocommerce-product-vendors' ),
+			        'pay-process' => __( 'Payment successful. In a few minutes you will receive an email with the outcome of the payment and the commission state will be changed accordingly.', 'yith-woocommerce-product-vendors' ),
+			        'pay-failed'  => __( 'Payment failed.', 'yith-woocommerce-product-vendors' )
 		        )
 	        );
 
@@ -223,12 +223,12 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
              *
              */
             return array(
-                'paid'       => __( 'Paid', 'yith_wc_product_vendors' ),
-                'unpaid'     => __( 'Unpaid', 'yith_wc_product_vendors' ),
-                'pending'    => __( 'Pending', 'yith_wc_product_vendors' ),
-                'refunded'   => __( 'Refunded', 'yith_wc_product_vendors' ),
-                'cancelled'  => __( 'Cancelled', 'yith_wc_product_vendors' ),
-                'processing' => __( 'Processing', 'yith_wc_product_vendors' ),
+                'paid'       => __( 'Paid', 'yith-woocommerce-product-vendors' ),
+                'unpaid'     => __( 'Unpaid', 'yith-woocommerce-product-vendors' ),
+                'pending'    => __( 'Pending', 'yith-woocommerce-product-vendors' ),
+                'refunded'   => __( 'Refunded', 'yith-woocommerce-product-vendors' ),
+                'cancelled'  => __( 'Cancelled', 'yith-woocommerce-product-vendors' ),
+                'processing' => __( 'Processing', 'yith-woocommerce-product-vendors' ),
             );
         }
 
@@ -287,8 +287,8 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
             if( $is_super_user || $vendor->is_valid() && $vendor->has_limited_access() && $vendor->is_owner() ) {
 
                 $args = apply_filters( 'yith_wc_product_vendors_commissions_menu_items', array(
-                        'page_title' => __( 'Commissions', 'yith_wc_product_vendors' ),
-                        'menu_title' => __( 'Commissions', 'yith_wc_product_vendors' ),
+                        'page_title' => __( 'Commissions', 'yith-woocommerce-product-vendors' ),
+                        'menu_title' => __( 'Commissions', 'yith-woocommerce-product-vendors' ),
                         'capability' => 'edit_products',
                         'menu_slug'  => $this->_screen,
                         'function'   => array( $this, 'commissions_details_page' ),
@@ -303,12 +303,12 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
             }
 
 //            if ( $is_super_user  ) {
-//                add_submenu_page( $this->_screen, $page_title, __( 'Commissions report', 'yith_wc_product_vendors' ), $capability, $menu_slug );
+//                add_submenu_page( $this->_screen, $page_title, __( 'Commissions report', 'yith-woocommerce-product-vendors' ), $capability, $menu_slug );
 //
 //                $submenu_args = apply_filters( 'yith_wc_product_vendors_commissions_submenu_items', array(
 //                        'parent_slug' => $this->_screen,
-//                        'page_title'  => __( 'Unpaid earnings', 'yith_wc_product_vendors' ),
-//                        'menu_title'  => __( 'Unpaid earnings', 'yith_wc_product_vendors' ),
+//                        'page_title'  => __( 'Unpaid earnings', 'yith-woocommerce-product-vendors' ),
+//                        'menu_title'  => __( 'Unpaid earnings', 'yith-woocommerce-product-vendors' ),
 //                        'capability'  => 'manage_options',
 //                        'menu_slug'   => 'yith_commissions_by_vendor',
 //                        'function'    => array( $this, 'earnings_by_vendor' )
@@ -355,7 +355,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 
                 $args = apply_filters( 'yith_vendors_commissions_template', array(
                         'commissions_table' => $commissions_table,
-                        'page_title'        => __( 'Vendor Commissions', 'yith_wc_product_vendors' )
+                        'page_title'        => __( 'Vendor Commissions', 'yith-woocommerce-product-vendors' )
                     )
                 );
 
@@ -392,7 +392,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 
             $args = apply_filters( 'yith_vendors_commissions_template', array(
                     'commissions_table' => $commissions_table,
-                    'page_title'        => __( 'Earnings by vendor', 'yith_wc_product_vendors' )
+                    'page_title'        => __( 'Earnings by vendor', 'yith-woocommerce-product-vendors' )
                 )
             );
 
@@ -410,7 +410,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 	     */
 	    public function change_commission_view_page_title( $admin_title, $title ) {
 		    if ( isset( $_GET['page'] ) && $_GET['page'] == $this->_screen && ! empty( $_GET['view'] ) ) {
-			    $title = sprintf( __( 'Commission #%d details', 'yith_wc_product_vendors' ), absint( $_GET['view'] ) );
+			    $title = sprintf( __( 'Commission #%d details', 'yith-woocommerce-product-vendors' ), absint( $_GET['view'] ) );
 			    $admin_title = sprintf( __( '%1$s &lsaquo; %2$s &#8212; WordPress' ), $title, get_bloginfo( 'name' ) );
 		    }
 
@@ -1169,7 +1169,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 		    foreach ( $refunds as $refund_id => $commissions_refunded ) {
 			    foreach ( $commissions_refunded as $commission_id => $amount ) {
 				    $commission = YITH_Commission( $commission_id );
-				    $note = $refund_id == $new_refund_id ? sprintf( __( 'Refunded %s from order', 'yith_wc_product_vendors' ), wc_price( abs( $amount ) ) ) : '';
+				    $note = $refund_id == $new_refund_id ? sprintf( __( 'Refunded %s from order', 'yith-woocommerce-product-vendors' ), wc_price( abs( $amount ) ) ) : '';
 				    $commission->update_amount( $amount, $note );
 			    }
 			    update_post_meta( $refund_id, '_refunded_commissions', $commissions_refunded );
@@ -1202,7 +1202,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
 				    $commission = YITH_Commission( $commission_id );
 
 				    // update commission
-				    $commission->update_amount( abs( $amount ), $note ? sprintf( __( 'Cancelled %s refund from order', 'yith_wc_product_vendors' ), wc_price( abs( $amount ) ) ) : '' );
+				    $commission->update_amount( abs( $amount ), $note ? sprintf( __( 'Cancelled %s refund from order', 'yith-woocommerce-product-vendors' ), wc_price( abs( $amount ) ) ) : '' );
 			    }
 
 			    // remove post meta to delete every track of refunds
@@ -1286,7 +1286,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
          */
         public function add_screen_option() {
             if ( 'toplevel_page_' . $this->_screen == get_current_screen()->id ) {
-                add_screen_option( 'per_page', array( 'label' => __( 'Commissions', 'yith_wc_product_vendors' ), 'default' => 20, 'option' => 'edit_commissions_per_page' ) );
+                add_screen_option( 'per_page', array( 'label' => __( 'Commissions', 'yith-woocommerce-product-vendors' ), 'default' => 20, 'option' => 'edit_commissions_per_page' ) );
 
             }
         }
@@ -1322,7 +1322,7 @@ if ( ! class_exists( 'YITH_Commissions' ) ) {
                     if( $line_item['product_id'] == $product->id ){
                         $commission_id = wc_get_order_item_meta( $line_item_id, '_commission_id', true );
                         $admin_url = YITH_Commission( $commission_id )->get_view_url( 'admin' );
-                        $attribute_label = '_commission_id' == $meta_key ? sprintf( "<a href='%s' class='%s'>" . __( 'commission_id', 'yith_wc_product_vendors' ) . '</a>', $admin_url, 'commission-id-label' ) : $attribute_label;
+                        $attribute_label = '_commission_id' == $meta_key ? sprintf( "<a href='%s' class='%s'>" . __( 'commission_id', 'yith-woocommerce-product-vendors' ) . '</a>', $admin_url, 'commission-id-label' ) : $attribute_label;
                     }
                 }
             }

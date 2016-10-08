@@ -56,18 +56,18 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
          */
         public function get_columns() {
             $columns = apply_filters( 'yith_commissions_list_table_column', array(
-                    'commission_id'     => __( 'ID', 'yith_wc_product_vendors' ),
-                    'commission_status' => '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', 'yith_wc_product_vendors' ) . '">' . esc_attr__( 'Status', 'yith_wc_product_vendors' ) . '</span>',
-                    'order_id'          => __( 'Order', 'yith_wc_product_vendors' ),
-                    'line_item'         => __( 'Product', 'yith_wc_product_vendors' ),
-                    'rate'              => __( 'Rate', 'yith_wc_product_vendors' ),
-                    'user'              => __( 'User', 'yith_wc_product_vendors' ),
+                    'commission_id'     => __( 'ID', 'yith-woocommerce-product-vendors' ),
+                    'commission_status' => '<span class="status_head tips" data-tip="' . esc_attr__( 'Status', 'yith-woocommerce-product-vendors' ) . '">' . esc_attr__( 'Status', 'yith-woocommerce-product-vendors' ) . '</span>',
+                    'order_id'          => __( 'Order', 'yith-woocommerce-product-vendors' ),
+                    'line_item'         => __( 'Product', 'yith-woocommerce-product-vendors' ),
+                    'rate'              => __( 'Rate', 'yith-woocommerce-product-vendors' ),
+                    'user'              => __( 'User', 'yith-woocommerce-product-vendors' ),
                     'vendor'            => YITH_Vendors()->get_vendors_taxonomy_label( 'singular_name' ),
-                    'bank_account'      => __( 'IBAN/BIC', 'yith_wc_product_vendors' ),
-                    'amount'            => __( 'Amount', 'yith_wc_product_vendors' ),
-                    'date'              => __( 'Date', 'yith_wc_product_vendors' ),
-                    'date_edit'         => __( 'Last update', 'yith_wc_product_vendors' ),
-                    'user_actions'      => __( 'Actions', 'yith_wc_product_vendors' ),
+                    'bank_account'      => __( 'IBAN/BIC', 'yith-woocommerce-product-vendors' ),
+                    'amount'            => __( 'Amount', 'yith-woocommerce-product-vendors' ),
+                    'date'              => __( 'Date', 'yith-woocommerce-product-vendors' ),
+                    'date_edit'         => __( 'Last update', 'yith-woocommerce-product-vendors' ),
+                    'user_actions'      => __( 'Actions', 'yith-woocommerce-product-vendors' ),
                 )
             );
 
@@ -205,7 +205,7 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                     $order = wc_get_order( $rec->order_id );
 
                     if( ! $order ){
-                        echo '<small class="meta">' . __( 'Order Deleted', 'yith_wc_product_vendors' ) . '</small>';
+                        echo '<small class="meta">' . __( 'Order Deleted', 'yith-woocommerce-product-vendors' ) . '</small>';
                         return;
                     }
 
@@ -256,7 +256,7 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                         $order_info = $order_number;
                     }
 
-                    printf( _x( '%s by %s', 'Order number by user', 'yith_wc_product_vendors' ), $order_info, $username );
+                    printf( _x( '%s by %s', 'Order number by user', 'yith-woocommerce-product-vendors' ), $order_info, $username );
 
                     if ( $order->billing_email ) {
                         echo '<small class="meta email"><a href="' . esc_url( 'mailto:' . $order->billing_email ) . '">' . esc_html( $order->billing_email ) . '</a></small>';
@@ -284,7 +284,7 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                     $user      = $rec->get_user();
 
                     if ( empty( $user ) ) {
-                        return "<em>" . __( 'User deleted', 'yith_wc_product_vendors' ) . "</em>";
+                        return "<em>" . __( 'User deleted', 'yith-woocommerce-product-vendors' ) . "</em>";
                     }
 
                     $user_url  = get_edit_user_link( $rec->user_id );
@@ -296,7 +296,7 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                     $vendor = $rec->get_vendor();
 
                     if ( ! $vendor->is_valid() ) {
-                        return "<em>" . __( 'Vendor deleted', 'yith_wc_product_vendors' ) . "</em>";
+                        return "<em>" . __( 'Vendor deleted', 'yith-woocommerce-product-vendors' ) . "</em>";
                     }
 
                     $vendor_url  = get_edit_term_link( $vendor->id, $vendor->taxonomy );
@@ -309,22 +309,22 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                     break;
 
                 case 'user_actions':
-                    printf( '<a class="button tips view" href="%1$s" data-tip="%2$s">%2$s</a>', $rec->get_view_url( 'admin' ), __( 'View', 'yith_wc_product_vendors' ) );
+                    printf( '<a class="button tips view" href="%1$s" data-tip="%2$s">%2$s</a>', $rec->get_view_url( 'admin' ), __( 'View', 'yith-woocommerce-product-vendors' ) );
                     break;
 
                 case 'date':
                     $date   = $rec->get_date();
-                    $t_time = date_i18n( __( 'Y/m/d g:i:s A', 'yith_wc_product_vendors' ), mysql2date( 'U', $date ) );
+                    $t_time = date_i18n( __( 'Y/m/d g:i:s A', 'yith-woocommerce-product-vendors' ), mysql2date( 'U', $date ) );
                     $m_time = $date;
                     $time   = mysql2date( 'G', $date );
 
                     $time_diff = time() - $time;
 
                     if ( $time_diff > 0 && $time_diff < DAY_IN_SECONDS ) {
-                        $h_time = sprintf( __( '%s ago', 'yith_wc_product_vendors' ), human_time_diff( $time ) );
+                        $h_time = sprintf( __( '%s ago', 'yith-woocommerce-product-vendors' ), human_time_diff( $time ) );
                     }
                     else {
-                        $h_time = mysql2date( __( 'Y/m/d', 'yith_wc_product_vendors' ), $m_time );
+                        $h_time = mysql2date( __( 'Y/m/d', 'yith-woocommerce-product-vendors' ), $m_time );
                     }
 
                     echo $h_time ? '<abbr title="' . $t_time . '">' . $h_time . '</abbr>' : '<small class="meta">-</small>';
@@ -339,9 +339,9 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
                     $time_diff = time() - $time;
 
 	                if ( $time_diff > 0 && $time_diff < WEEK_IN_SECONDS )
-		                $h_time = sprintf( __( '%s ago', 'yith_wc_product_vendors' ), human_time_diff( $time ) );
+		                $h_time = sprintf( __( '%s ago', 'yith-woocommerce-product-vendors' ), human_time_diff( $time ) );
 	                else
-		                $h_time = mysql2date( __( 'Y/m/d', 'yith_wc_product_vendors' ), $m_time );
+		                $h_time = mysql2date( __( 'Y/m/d', 'yith-woocommerce-product-vendors' ), $m_time );
 
                     echo $h_time ? '<abbr title="' . $t_time . '">' . $h_time . '</abbr>' : '<small class="meta">-</small>';
                     break;
@@ -373,7 +373,7 @@ if ( ! class_exists( 'YITH_Commissions_List_Table' ) ) {
          * @access public
          */
         public function no_items() {
-            _e( 'No commissions found.', 'yith_wc_product_vendors' );
+            _e( 'No commissions found.', 'yith-woocommerce-product-vendors' );
         }
 
 

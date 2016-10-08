@@ -11,6 +11,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit; // Exit if accessed directly
 }
+global $yith_jetpack_1;
 
 $is_premium_activated = false;
 if( is_array( $module_data['premium_constat'] ) ) {
@@ -59,6 +60,14 @@ $title = wp_kses( $plugin['name'], $plugins_allowedtags );
 $description = strip_tags( $plugin['short_description'] );
 
 $version     = wp_kses( $plugin['version'], $plugins_allowedtags );
+
+$offline_version = '';
+$plugin_offline_info = get_plugin_data($yith_jetpack_1->module_path($module_data['slug']).$module_data['file']);
+
+if( isset( $plugin_offline_info['Version'] ) ) {
+    $offline_version = $plugin_offline_info['Version'];
+}
+
 
 $name = strip_tags( $title . ' ' . $version );
 
@@ -136,9 +145,10 @@ $last_updated_timestamp = strtotime( $plugin['last_updated'] );
         <a href="<?php echo esc_url( $details_link ); ?>" class="thickbox plugin-icon"><img src="<?php echo esc_attr( $plugin_icon_url ) ?>" /></a>
 
         <div class="name column-name">
-            <h4>
+            <h3>
                 <a href="<?php echo esc_url( $details_link ); ?>" class="thickbox"><?php echo $title; ?></a>
-            </h4>
+            </h3>
+            <span><?php echo $offline_version ? $offline_version : '' ; ?></span>
         </div>
         <div class="action-links">
             <?php

@@ -411,8 +411,8 @@ if ( ! class_exists( 'YITH_WAPO_Admin' ) ) {
                 <?php
             }
 
-            add_action( 'admin_footer', 'my_action_javascript' );
-            function my_action_javascript() {
+            add_action( 'admin_footer', 'yith_wapo_my_action_javascript' );
+            function yith_wapo_my_action_javascript() {
                 global $post; ?>
                 <script type="text/javascript" >
                     jQuery(document).ready(function($) {

@@ -99,6 +99,11 @@ if ( ! class_exists( 'YITH_WCAN' ) ) {
             $this->required();
 
             $this->init();
+
+            // Support to Ultimate Member plugin
+            if( class_exists( 'UM_API' ) ){
+                add_action( 'init', array( $this, 'ultimate_member_support' ), 0 );
+            }
         }
 
         /**
@@ -216,6 +221,25 @@ if ( ! class_exists( 'YITH_WCAN' ) ) {
                 $chosen_attributes = WC_Query::get_layered_nav_chosen_attributes();
             }
             return $chosen_attributes;
+        }
+
+        /**
+         * Support to ultimate members functions
+         * 
+         * The method set_predefined_fields call a WP_Query that generate
+         * an issue with shop filtered query. Move this step to init with priority 2 
+         * instead of 1
+         *
+         * @author Andrea Grillo <andrea.grillo@yithemes.com>
+         * @since  3.0.9
+         * @return void
+         */
+        public function ultimate_member_support(){
+            global $ultimatemember;
+            if( $ultimatemember ){
+                remove_action('init',  array($ultimatemember->builtin, 'set_predefined_fields'), 1);
+                add_action('init',  array($ultimatemember->builtin, 'set_predefined_fields'), 2);
+            }
         }
 
     }

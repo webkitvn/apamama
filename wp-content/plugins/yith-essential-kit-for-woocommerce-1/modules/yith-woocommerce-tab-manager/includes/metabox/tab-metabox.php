@@ -17,7 +17,7 @@ $args	=	array (
                     'ywtm_text_tab' =>  array (
                         'label' =>  __('Content Tab', 'yith-woocommerce-tab-manager'),
                         'desc'  =>  '',
-                        'type'  =>  'textarea',
+                        'type'  =>  'textarea-editor',
                     ),
                     'ywtm_show_tab' => array(
                         'label' => __( 'Enable Tab', 'yith-woocommerce-tab-manager' ),

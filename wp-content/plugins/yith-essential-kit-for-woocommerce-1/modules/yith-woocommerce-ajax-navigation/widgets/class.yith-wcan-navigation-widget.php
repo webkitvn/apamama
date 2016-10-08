@@ -110,9 +110,9 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                 }
 
                 if ( in_array( $display_type, apply_filters( 'yith_wcan_display_type_list', array( 'list' ) ) ) ) {
-                    $ancestors = get_terms(
-                        $taxonomy,
+                    $ancestors = yith_wcan_wp_get_terms(
                         array(
+                            'taxonomy'      => $taxonomy,
                             'parent'        => 0,
                             'hierarchical'  => true,
                             'hide_empty'    => false,
@@ -824,7 +824,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
             $attribute = $_POST['attribute'];
             $return    = array( 'message' => '', 'content' => $_POST );
 
-            $terms = get_terms( 'pa_' . $attribute, array( 'hide_empty' => '0' ) );
+            $terms = yith_wcan_wp_get_terms( array( 'taxonomy' => 'pa_' . $attribute, 'hide_empty' => '0' ) );
 
             $settings        = $this->get_settings();
             $widget_settings = $settings[ $this->number ];
@@ -859,7 +859,8 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
 
         public function get_list_html( $terms, $taxonomy, $query_type, $display_type, $instance, $terms_type_list, $current_term, $args, $is_child_class, $is_parent_class, $is_chosen_class, $level = 0, $filter_term_field = 'slug' ){
             $_chosen_attributes = YITH_WCAN()->get_layered_nav_chosen_attributes();
-            $in_array_function = apply_filters( 'yith_wcan_in_array_ignor_case', false ) ? 'yit_in_array_ignore_case' : 'in_array';
+            $in_array_function  = apply_filters( 'yith_wcan_in_array_ignor_case', false ) ? 'yit_in_array_ignore_case' : 'in_array';
+            $terms              = apply_filters( 'yith_wcan_get_list_html_terms', $terms, $taxonomy, $instance );
             foreach ( $terms as $parent_id => $term_ids ) {
                 $term = get_term_by( 'id', $parent_id, $taxonomy );
 
@@ -936,7 +937,7 @@ if ( ! class_exists( 'YITH_WCAN_Navigation_Widget' ) ) {
                             if ($name !== $taxonomy) {
 
                                 // Exclude query arg for current term archive
-                                while ($in_array_function($term->slug, $data['terms'])) {
+                                if ($in_array_function($term->slug, $data['terms'])) {
                                     $key = array_search($current_term, $data);
                                     unset($data['terms'][$key]);
                                 }

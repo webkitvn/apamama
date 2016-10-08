@@ -458,7 +458,7 @@ if ( ! class_exists( 'YITH_Commission' ) ) {
                 $this->status = $new_status;
 
 				$all_status = YITH_Commissions()->get_status();
-				$this->add_note( trim( $note . ' ' . sprintf( __( 'Commission status changed from %s to %s.', 'yith_wc_product_vendors' ), $all_status[ $old_status ], $all_status[ $new_status ] ) ) );
+				$this->add_note( trim( $note . ' ' . sprintf( __( 'Commission status changed from %s to %s.', 'yith-woocommerce-product-vendors' ), $all_status[ $old_status ], $all_status[ $new_status ] ) ) );
 
 				// Status was changed
 				do_action( 'yith_commission_status_' . $new_status, $this->id );

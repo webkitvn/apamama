@@ -170,16 +170,16 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
             }
 
             $admin_tabs = apply_filters( 'yith_vendors_admin_tabs', array(
-                    'commissions' => __( 'Commissions', 'yith_wc_product_vendors' ),
-                    'vendors'     => __( 'Vendors', 'yith_wc_product_vendors' ),
-                    'premium'     => __( 'Premium Version', 'yith_wc_product_vendors' ),
+                    'commissions' => __( 'Commissions', 'yith-woocommerce-product-vendors' ),
+                    'vendors'     => __( 'Vendors', 'yith-woocommerce-product-vendors' ),
+                    'premium'     => __( 'Premium Version', 'yith-woocommerce-product-vendors' ),
                 ) );
 
             $args = array(
                 'create_menu_page' => true,
                 'parent_slug'      => '',
-                'page_title'       => __( 'Multi Vendor', 'yith_wc_product_vendors' ),
-                'menu_title'       => __( 'Multi Vendor', 'yith_wc_product_vendors' ),
+                'page_title'       => __( 'Multi Vendor', 'yith-woocommerce-product-vendors' ),
+                'menu_title'       => __( 'Multi Vendor', 'yith-woocommerce-product-vendors' ),
                 'capability'       => apply_filters( 'yit_wcmv_plugin_options_capability', 'manage_options' ),
                 'parent'           => '',
                 'parent_page'      => 'yit_plugin_panel',
@@ -398,6 +398,8 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
 
                     wp_set_object_terms( $object_id, $terms, $taxonomy, false );
                 }
+
+                do_action( 'yith_wcmv_save_post_product', $post_id, $post, $current_vendor );
             }
         }
 
@@ -410,19 +412,39 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
          * @use         current_screen filter
          */
         public function disabled_manage_other_vendors_posts() {
-            if ( isset( $_POST[ 'post_ID' ] ) || !isset( $_GET[ 'post' ] ) ) {
+            if ( isset( $_POST[ 'post_ID' ] ) || ! isset( $_GET[ 'post' ] ) ) {
                 return;
             }
 
-            $vendor         = yith_get_vendor( 'current', 'user' );
-             /* WPML Support */
-            $default_language = function_exists( 'wpml_get_default_language' ) ? wpml_get_default_language() : null;
-            $post_id =  yit_wpml_object_id(  $_GET['post'], 'product', true, $default_language );
-            $product_vendor = yith_get_vendor( $post_id, 'product' ); // If false, the product hasn't any vendor set
-            $post           = get_post( $_GET['post'] );
+            $post_id = $product_vendor = 0;
+            $vendor = yith_get_vendor( 'current', 'user' );
 
-            if ( $vendor->has_limited_access() && false !== $product_vendor && $vendor->id != $product_vendor->id ) {
-                wp_die( sprintf( __( 'You do not have permission to edit this product. %1$sClick here to view and edit your products%2$s.', 'yith_wc_product_vendors' ), '<a href="' . esc_url( 'edit.php?post_type=product' ) . '">', '</a>' ) );
+             /* WPML Support */
+            $default_language   = function_exists( 'wpml_get_default_language' ) ? wpml_get_default_language() : null;
+            $post               = get_post( $_GET['post'] );
+            $is_seller          = $vendor->is_valid() && $vendor->has_limited_access();
+
+            if( $post && 'product' == $post->post_type ){
+                $post_id            =  yit_wpml_object_id(  $_GET['post'], 'product', true, $default_language );
+                $product_vendor     = yith_get_vendor( $post_id, 'product' ); // If false, the product hasn't any vendor set
+                if ( $is_seller && false !== $product_vendor && $vendor->id != $product_vendor->id ) {
+                    wp_die( sprintf( __( 'You do not have permission to edit this product. %1$sClick here to view and edit your products%2$s.', 'yith-woocommerce-product-vendors' ), '<a href="' . esc_url( 'edit.php?post_type=product' ) . '">', '</a>' ) );
+                }
+            }
+
+            if( $post && 'shop_order' == $post->post_type ){
+                $vendor_orders = $vendor->get_orders( 'all' );
+                if( $is_seller && ! in_array( $post->ID, $vendor_orders ) ){
+                    wp_die( sprintf( __( 'You do not have permission to edit this order. %1$sClick here to view and edit your orders%2$s.', 'yith-woocommerce-product-vendors' ), '<a href="' . esc_url( 'edit.php?post_type=shop_order' ) . '">', '</a>' ) );
+                }
+            }
+
+
+
+
+            if( $is_seller ){
+
+
             }
         }
 
@@ -468,8 +490,8 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
 
             $menus = apply_filters( 'yith_wc_product_vendors_details_menu_items', array(
                     'vendor_details' => array(
-                        'page_title' => __( 'Vendor Profile', 'yith_wc_product_vendors' ),
-                        'menu_title' => __( 'Vendor Profile', 'yith_wc_product_vendors' ),
+                        'page_title' => __( 'Vendor Profile', 'yith-woocommerce-product-vendors' ),
+                        'menu_title' => __( 'Vendor Profile', 'yith-woocommerce-product-vendors' ),
                         'capability' => 'edit_products',
                         'menu_slug'  => 'yith_vendor_details',
                         'function'   => array( $this, 'admin_details_page' ),
@@ -600,8 +622,8 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
                     $duplicate = false;
                 }
 
-                $message   = __( 'A vendor with this name already exists.', 'yith_wc_product_vendors' );
-                $title     = __( 'Vendor name already exists', 'yith_wc_product_vendors' );
+                $message   = __( 'A vendor with this name already exists.', 'yith-woocommerce-product-vendors' );
+                $title     = __( 'Vendor name already exists', 'yith-woocommerce-product-vendors' );
                 $back_link = admin_url( 'edit-tag.php' );
 
                 $back_link = esc_url( add_query_arg( $back_link, array(
@@ -618,7 +640,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
             } else {
                 $duplicate = get_term_by( 'name', $term, $taxonomy );
 
-                return !$duplicate ? $term : new WP_Error( 'term_exists', __( 'A vendor with this name already exists.', 'yith_wc_product_vendors' ), $duplicate );
+                return !$duplicate ? $term : new WP_Error( 'term_exists', __( 'A vendor with this name already exists.', 'yith-woocommerce-product-vendors' ), $duplicate );
             }
         }
 
@@ -1020,12 +1042,12 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
          * @use      plugin_action_links_{$plugin_file_name}
          */
         public function action_links( $links ) {
-            $links[]           = '<a href="' . admin_url( "admin.php?page={$this->_panel_page}" ) . '">' . __( 'Settings', 'yith_wc_product_vendors' ) . '</a>';
-            $premium_live_text = defined( 'YITH_WPV_FREE_INIT' ) ? __( 'Premium live demo', 'yith_wc_product_vendors' ) : __( 'Live demo', 'yith_wc_product_vendors' );
+            $links[]           = '<a href="' . admin_url( "admin.php?page={$this->_panel_page}" ) . '">' . __( 'Settings', 'yith-woocommerce-product-vendors' ) . '</a>';
+            $premium_live_text = defined( 'YITH_WPV_FREE_INIT' ) ? __( 'Premium live demo', 'yith-woocommerce-product-vendors' ) : __( 'Live demo', 'yith-woocommerce-product-vendors' );
             $links[]           = '<a href="' . $this->_premium_live . '" target="_blank">' . $premium_live_text . '</a>';
 
             if ( defined( 'YITH_WPV_FREE_INIT' ) ) {
-                $links[] = '<a href="' . $this->get_premium_landing_uri() . '" target="_blank">' . __( 'Premium Version', 'yith_wc_product_vendors' ) . '</a>';
+                $links[] = '<a href="' . $this->get_premium_landing_uri() . '" target="_blank">' . __( 'Premium Version', 'yith-woocommerce-product-vendors' ) . '</a>';
             }
 
             return $links;
@@ -1049,7 +1071,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
         public function plugin_row_meta( $plugin_meta, $plugin_file, $plugin_data, $status ) {
 
             if ( ( defined( 'YITH_WPV_INIT' ) && YITH_WPV_INIT == $plugin_file ) || ( defined( 'YITH_WPV_FREE_INIT' ) && YITH_WPV_FREE_INIT == $plugin_file ) ) {
-                $plugin_meta[] = '<a href="' . $this->_official_documentation . '" target="_blank">' . __( 'Plugin Documentation', 'yith_wc_product_vendors' ) . '</a>';
+                $plugin_meta[] = '<a href="' . $this->_official_documentation . '" target="_blank">' . __( 'Plugin Documentation', 'yith-woocommerce-product-vendors' ) . '</a>';
             }
 
             return $plugin_meta;
@@ -1173,7 +1195,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
             global $post;
             $vendor            = yith_get_vendor( 'current', 'user' );
             $is_ajax           = defined( 'DOING_AJAX' ) && DOING_AJAX;
-            $is_order_details  = is_admin() && !$is_ajax && 'shop_order' == get_current_screen()->id;
+            $is_order_details  = is_admin() && ! $is_ajax && 'shop_order' == get_current_screen()->id;
             $refund_management = 'yes' == get_option( 'yith_wpv_vendors_option_order_refund_synchronization', 'no' ) ? true : false;
             $quote_management  = 'yes' == get_option( 'yith_wpv_vendors_enable_request_quote', 'no' ) ? true : false;
 
@@ -1334,7 +1356,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
 
                 $user       = new WP_User( $user_id );
                 $user_roles = array();
-                $output     = esc_html__( 'None', 'yith_wc_product_vendors' );
+                $output     = esc_html__( 'None', 'yith-woocommerce-product-vendors' );
 
                 if ( is_array( $user->roles ) ) {
                     foreach ( $user->roles as $role ) {
@@ -1365,7 +1387,7 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
             }
 
             // Add our new roles column.
-            $columns[ 'roles' ] = esc_html__( 'Roles', 'yith_wc_product_vendors' );
+            $columns[ 'roles' ] = esc_html__( 'Roles', 'yith-woocommerce-product-vendors' );
 
             return $columns;
         }
@@ -1545,56 +1567,56 @@ if ( !class_exists( 'YITH_Vendors_Admin' ) ) {
         public function get_sidebar_link(){
             $links =  array(
                 array(
-                    'title' => __( 'Plugin documentation', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Plugin documentation', 'yith-woocommerce-product-vendors' ),
                     'url'   => $this->_official_documentation,
                 ),
             );
 
             if( defined( 'YITH_WPV_FREE_INIT' ) ){
                 $links[] = array(
-                    'title' => __( 'Discover the premium version', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Discover the premium version', 'yith-woocommerce-product-vendors' ),
                     'url'   => $this->_premium_landing,
                 );
 
                 $links[] = array(
-                    'title' => __( 'Free Vs Premium', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Free Vs Premium', 'yith-woocommerce-product-vendors' ),
                     'url'   => 'https://yithemes.com/themes/plugins/yith-woocommerce-multi-vendor/#tab-free_vs_premium_tab',
                 );
 
                 $links[] = array(
-                    'title' => __( 'Premium live demo', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Premium live demo', 'yith-woocommerce-product-vendors' ),
                     'url'   => $this->_premium_live
                 );
 
                 $links[] =  array(
-                    'title' => __( 'WordPress support forum', 'yith_wc_product_vendors' ),
+                    'title' => __( 'WordPress support forum', 'yith-woocommerce-product-vendors' ),
                     'url'   => 'https://wordpress.org/support/plugin/yith-woocommerce-product-vendors',
                 );
 
                 $links[] =  array(
-                    'title' => __( 'Changelog', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Changelog', 'yith-woocommerce-product-vendors' ),
                     'url'   => 'http://yithemes.com/docs-plugins/yith-woocommerce-multi-vendor/14-changelog.html',
                 );
             }
 
             if( defined( 'YITH_WPV_PREMIUM' ) ){
                 $links[] =  array(
-                    'title' => __( 'Support platform', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Support platform', 'yith-woocommerce-product-vendors' ),
                     'url'   => 'https://yithemes.com/my-account/support/dashboard/',
                 );
 
                 $links[] =  array(
-                    'title' => sprintf( '%s (%s %s)', __( 'Changelog', 'yith_wc_product_vendors' ), __( 'current version','yith_wc_product_vendors' ), YITH_WPV_VERSION ),
+                    'title' => sprintf( '%s (%s %s)', __( 'Changelog', 'yith-woocommerce-product-vendors' ), __( 'current version','yith-woocommerce-product-vendors' ), YITH_WPV_VERSION ),
                     'url'   => 'http://yithemes.com/docs-plugins/yith-woocommerce-multi-vendor/15-changelog-premium.html',
                 );
 
                 $links[] =  array(
-                    'title' => __( 'PayPal sandbox test accounts', 'yith_wc_product_vendors' ),
+                    'title' => __( 'PayPal sandbox test accounts', 'yith-woocommerce-product-vendors' ),
                     'url'   => 'https://developer.paypal.com/developer/accounts/',
                 );
 
                 $links[] =  array(
-                    'title' => __( 'Enable PayPal MassPay', 'yith_wc_product_vendors' ),
+                    'title' => __( 'Enable PayPal MassPay', 'yith-woocommerce-product-vendors' ),
                     'url'   => 'https://www.paypal.com/selfhelp/home',
                 );
             }

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Your Inspiration
- * Date: 16/03/2015
- * Time: 11:40
- */
+$content = wpautop( $content );
 ?>
 
-<p> <?php echo $content ?></p>
+<div class="tab-editor-container ywtm_content_tab"> <?php echo do_shortcode( $content ); ?></div>

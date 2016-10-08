@@ -212,13 +212,17 @@ jQuery(function ($) {
                 }
 
 
-                var widget_reload = function (t) {
-                    var id = t.attr('id');
-                    t.html($(response).find('#' + id).html());
+                var widget_reload = function(t) {
 
-                    if (t.text() == '') {
+                    var id              = t.attr('id'),
+                    widget_in_response  = $(response).find('#' + id);
+
+                    if( widget_in_response.length == 0 ){
                         t.hide();
-                    } else {
+                    }
+
+                    else {
+                        t.html(widget_in_response.html());
                         t.show();
                     }
                 };

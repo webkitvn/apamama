@@ -29,27 +29,6 @@ if( !class_exists( 'YITH_WCCL_Admin' ) ) {
         public $videotutorial_1080_url    = 'http://player.vimeo.com/external/81998290.hd.mp4?s=2cd578463c2771ecc30c036217b86691';
 
         /**
-         * Docs url
-         *
-         * @var string Official documentation url
-         * @since 1.2.4
-         */
-        public $doc_url = 'http://yithemes.com/docs-plugins/yith-woocommerce-color-label-variations/';
-
-        /**
-         * Premium landing url
-         *
-         * @var string Premium landing url
-         * @since 1.2.4
-         */
-        public $premium_landing_url = 'http://yithemes.com/themes/plugins/yith-woocommerce-color-and-label-variations';
-
-        /**
-         * @var string Quick View panel page
-         */
-        protected $_panel_page = 'yith_ywcl_panel';
-
-        /**
          * Constructor
          *
          * @access public
@@ -79,11 +58,6 @@ if( !class_exists( 'YITH_WCCL_Admin' ) ) {
 
             //Add videotutorials link
             add_filter( 'plugin_action_links_' . plugin_basename( dirname(__FILE__) . '/init.php' ), array( $this, 'action_links' ) );
-
-            //Add YITH Plugin Panel
-            add_action( 'admin_menu', array( $this, 'register_panel' ),5 );
-            //Add premium tab
-            add_action( 'ywcl_premium_tab', array( $this, 'print_premium_tab' ) );
 
             // YITH WCCL Loaded
             do_action( 'yith_wccl_loaded' );
@@ -342,67 +316,5 @@ if( !class_exists( 'YITH_WCCL_Admin' ) ) {
 <?php
             }
         }
-
-        
-        /**
-         * Register YITH Pnale
-         *
-         * @since   1.2.4
-         * @author  Alessio Torrisi <alessio.torrisi@yithemes.com>
-         * @return  void
-         */
-        public function register_panel() {
-
-            if ( !empty( $this->_panel ) ) {
-                return;
-            }
-
-            $admin_tabs = array(
-                'premium' => __( 'Premium Version', 'ywcl' ),
-            );
-
-            $args = array(
-                'create_menu_page' => true,
-                'parent_slug'      => '',
-                'page_title'       => _x( 'Color and Label Variations', 'plugin name in admin page title', 'ywcl' ),
-                'menu_title'       => _x( 'Color and Label Variations', 'plugin name in admin WP menu', 'ywcl' ),
-                'capability'       => 'manage_options',
-                'parent'           => '',
-                'parent_page'      => 'yit_plugin_panel',
-                'page'             => $this->_panel_page,
-                'admin-tabs'       => $admin_tabs,
-                'options-path'     => YITH_WCCL_DIR . '/plugin-options'
-            );
-
-            /* === Fixed: not updated theme  === */
-            if ( !class_exists( 'YIT_Plugin_Panel_WooCommerce' ) ) {
-                require_once( 'plugin-fw/lib/yit-plugin-panel-wc.php' );
-            }
-
-            $this->_panel = new YIT_Plugin_Panel_WooCommerce( $args );
-        }
-
-        /**
-         * Prints premium tab
-         *
-         * @since   1.2.4
-         * @author  Alessio Torrisi <alessio.torrisi@yithemes.com>
-         * @return  void
-         */
-        public function print_premium_tab() {
-            include( YITH_WCCL_DIR . '/templates/admin/premium.php' );
-        }
-
-        /**
-         * Get the premium landing uri
-         *
-         * @since   1.2.4
-         * @author  Alessio Torrisi <alessio.torrisi@yithemes.com>
-         * @return  string The premium landing link
-         */
-        public function get_premium_landing_uri(){
-            return defined( 'YITH_REFER_ID' ) ? $this->premium_landing_url . '?refer_id=' . YITH_REFER_ID : $this->premium_landing_url .'?refer_id=1030585';
-        }
-
     }
 }

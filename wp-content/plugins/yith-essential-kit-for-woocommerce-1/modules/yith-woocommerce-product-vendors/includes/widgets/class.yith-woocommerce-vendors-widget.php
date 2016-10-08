@@ -26,9 +26,9 @@ if ( ! class_exists( 'YITH_Woocommerce_Vendors_Widget' ) ) {
          */
         function __construct() {
             $id_base        = 'yith-vendors-list';
-            $name           = __( 'YITH Vendor List', 'yith_wc_product_vendors' );
+            $name           = __( 'YITH Vendor List', 'yith-woocommerce-product-vendors' );
             $widget_options = array(
-                'description' => __( 'Display the list with enabled vendors.', 'yith_wc_product_vendors' )
+                'description' => __( 'Display the list with enabled vendors.', 'yith-woocommerce-product-vendors' )
             );
 
             parent::__construct( $id_base, $name, $widget_options );
@@ -64,7 +64,7 @@ if ( ! class_exists( 'YITH_Woocommerce_Vendors_Widget' ) ) {
 
         public function form( $instance ) {
             $defaults = array(
-                'title'               => __( 'Vendor List', 'yith_wc_product_vendors' ),
+                'title'               => __( 'Vendor List', 'yith-woocommerce-product-vendors' ),
                 'hide_on_vendor_page' => '',
                 'show_product_number' => '',
                 'hide_empty'          => '',
@@ -73,22 +73,22 @@ if ( ! class_exists( 'YITH_Woocommerce_Vendors_Widget' ) ) {
             $instance = wp_parse_args( (array) $instance, $defaults );
             ?>
             <p>
-                <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'yith_wc_product_vendors' ) ?>:
+                <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'yith-woocommerce-product-vendors' ) ?>:
                     <input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" class="widefat" />
                 </label>
             </p>
               <p>
-                <label for="<?php echo $this->get_field_id( 'hide_on_vendor_page' ); ?>"><?php _e( 'Hide this widget on vendor page', 'yith_wc_product_vendors' ) ?>:
+                <label for="<?php echo $this->get_field_id( 'hide_on_vendor_page' ); ?>"><?php _e( 'Hide this widget on vendor page', 'yith-woocommerce-product-vendors' ) ?>:
                     <input type="checkbox" id="<?php echo $this->get_field_id( 'hide_on_vendor_page' ); ?>" name="<?php echo $this->get_field_name( 'hide_on_vendor_page' ); ?>" value="1" <?php checked( $instance['hide_on_vendor_page'], 1, true )?> class="widefat" />
                 </label>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'show_product_number' ); ?>"><?php _e( 'Vendor\'s products amount', 'yith_wc_product_vendors' ) ?>:
+                <label for="<?php echo $this->get_field_id( 'show_product_number' ); ?>"><?php _e( 'Vendor\'s products amount', 'yith-woocommerce-product-vendors' ) ?>:
                     <input type="checkbox" id="<?php echo $this->get_field_id( 'show_product_number' ); ?>" name="<?php echo $this->get_field_name( 'show_product_number' ); ?>" value="1" <?php checked( $instance['show_product_number'], 1, true )?> class="widefat" />
                 </label>
             </p>
             <p>
-                <label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Hide vendors with no products', 'yith_wc_product_vendors' ) ?>:
+                <label for="<?php echo $this->get_field_id( 'hide_empty' ); ?>"><?php _e( 'Hide vendors with no products', 'yith-woocommerce-product-vendors' ) ?>:
                     <input type="checkbox" id="<?php echo $this->get_field_id( 'hide_empty' ); ?>" name="<?php echo $this->get_field_name( 'hide_empty' ); ?>" value="1" <?php checked( $instance['hide_empty'], 1, true )?> class="widefat" />
                 </label>
             </p>

@@ -103,6 +103,7 @@ if( ! class_exists( 'YITH_WCAUTHNET_Credit_Card_Gateway' ) ){
 			$this->sandbox = $this->get_option( 'sandbox' );
 			$this->transaction_type = $this->get_option( 'transaction_type' );
 			$this->debug = $this->get_option( 'debug' );
+			$this->has_fields = false;
 
 			// Logs
 			if ( 'yes' == $this->debug ) {
@@ -123,6 +124,22 @@ if( ! class_exists( 'YITH_WCAUTHNET_Credit_Card_Gateway' ) ){
 
 			// register admin notices
 			add_action( 'admin_notices', array( $this, 'admin_notices' ) );
+		}
+
+		/**
+		 * Print payment method fields (if any)
+		 *
+		 * @return void
+		 * @since 1.0.10
+		 */
+		public function payment_fields() {
+			if ( $description = $this->get_description() ) {
+				echo wpautop( wptexturize( $description ) );
+			}
+
+			if ( $this->has_fields() ) {
+				parent::payment_fields();
+			}
 		}
 
 		/**
